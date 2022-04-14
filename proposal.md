@@ -47,3 +47,11 @@
         * logged in user is then taken to their feed with users that they follow
         * navigation is shown for their own profile, making a new post, maybe one other destination?
 * This site is 'more than CRUD' because it allows users to interact with the information, and in effect the other users on the service.
+
+## Minimum Viable Product
+
+For this project to be viable the minimum necessary features include:
+
+* A form to accept a request to post a song
+* an interface with an API to resolve the user request into a song
+* an interface to find playable media for that song, OR a way to link to playable media
