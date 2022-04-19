@@ -19,9 +19,12 @@ class User(db.Model):
 
 class Song(db.Model):
     """table to organize songs that have been submitted"""
+    
+    __tablename__ = "songs"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     artist = db.Column(db.String, nullable=False)
     youtube_url = db.Column(db.String)
     lastfm_entry = db.Column(db.String)
+
