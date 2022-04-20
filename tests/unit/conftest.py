@@ -23,3 +23,9 @@ def test_db(test_app):
 def new_song():
     song = Song(title="Army of Me", artist="Bjork", youtube_url="https://www.youtube.com/watch?v=VaLfiKq_Kvw", lastfm_entry="https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me")
     return song
+
+@pytest.fixture
+def persisted_song(test_db, new_song):
+    test_db.session.add(new_song)
+    test_db.session.commit()
+    return new_song

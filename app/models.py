@@ -15,6 +15,8 @@ class User(db.Model):
     admin = db.Column(db.Boolean, default=False)
     email_confirm = db.Column(db.Boolean, default=False)
     account_enabled = db.Column(db.Boolean, default=True)
+    songs = db.Relationship('Song', secondary='posts', backref='users')
+    
 
 
 class Song(db.Model):
@@ -28,3 +30,13 @@ class Song(db.Model):
     youtube_url = db.Column(db.String)
     lastfm_entry = db.Column(db.String)
 
+
+class Post(db.Model):
+    """relationship table for each post"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, backref=db.backref('posts', lazy=True))
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False, backref=db.backref('posts', lazy=True))
+    timestamp = db.Column(db.DateTime, nullable=False)
