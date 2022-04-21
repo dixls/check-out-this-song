@@ -1,4 +1,3 @@
-from psycopg2 import connect
 from app.models import Song
 import pytest
 from app import create_app

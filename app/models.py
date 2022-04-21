@@ -1,4 +1,6 @@
+import bcrypt
 from .extensions import db
+from flask_bcrypt import Bcrypt
 
 
 class User(db.Model):
@@ -24,6 +26,32 @@ class User(db.Model):
     @classmethod
     def get_id(self):
         return f"{self.id}"
+
+    @classmethod
+    def signup(cls, username, email, password, avatar=None, bio=None, admin=False):
+        """sign up a new user with hashed password"""
+
+        hashed_pass = bcrypt.generate_password_hash(password).decode("UTF-8")
+
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pass,
+            avatar=avatar,
+            bio=bio,
+            admin=admin,
+        )
+
+        db.session.add(user)
+        return user
+    
+    @classmethod
+    def authenticate(cls, username, password):
+        """
+        checks credentials and returns user if successful, returns False if not
+
+        hopefully successfully checks against both username and password
+        """
 
 
 class Song(db.Model):
