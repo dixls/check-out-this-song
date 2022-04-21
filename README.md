@@ -84,5 +84,11 @@ COTS will use a relational database similar to the one described in the image be
 ## Still to do
 
 * Flesh out proposed user flows
+* Test db models
+* start making forms and views
+
+
+## Done
+
 * Set up organization of application
-* 
+* Create db models
