@@ -1,4 +1,4 @@
-from app.models import Song
+from app.models import Song, User
 from app import create_app
 import pytest
 from app.extensions import db
@@ -21,11 +21,33 @@ def test_db(test_app):
 
 @pytest.fixture
 def new_song():
-    song = Song(title="Army of Me", artist="Bjork", youtube_url="https://www.youtube.com/watch?v=VaLfiKq_Kvw", lastfm_entry="https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me")
+    song = Song(
+        title="Army of Me",
+        artist="Bjork",
+        youtube_url="https://www.youtube.com/watch?v=VaLfiKq_Kvw",
+        lastfm_entry="https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
+    )
     return song
+
 
 @pytest.fixture
 def persisted_song(test_db, new_song):
     test_db.session.add(new_song)
     test_db.session.commit()
     return new_song
+
+
+@pytest.fixture
+def new_user():
+    user = User(
+        username="test_user1",
+        email="user@text.com",
+        password="unhashed-pw"
+    )
+    return user
+
+
+@pytest.fixture
+def persisted_user(new_user, test_db):
+    test_db.session.add(new_user)
+    test_db.session.commit()

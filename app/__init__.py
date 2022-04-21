@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from .views import main
-from .extensions import db
+from .extensions import db, login_manager
 
 
 def create_app(config_type="config.DevelopmentConfig"):
@@ -16,6 +16,7 @@ def create_app(config_type="config.DevelopmentConfig"):
 
     db.app = app
     db.init_app(app)
+    login_manager.init_app(app)
 
     app.register_blueprint(main)
 
