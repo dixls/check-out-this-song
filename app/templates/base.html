@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +8,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <title>Check Out This Song!</title>
 </head>
+
 <body>
-    {% include 'nav.html' %}
-    <div class="containter">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <section>
+        {% include 'nav.html' %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="notification">{{message}}</div>
+        {% endfor %}
+        {% endif %}
+        <div class="containter is-fluid">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
 </body>
+
 </html>
