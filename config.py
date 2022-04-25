@@ -1,3 +1,4 @@
+from distutils.debug import DEBUG
 import os
 from dotenv import load_dotenv
 
@@ -24,6 +25,7 @@ class Config:
 class DevelopmentConfig(Config):
     SECRET_KEY = os.getenv("SECRET_KEY", default="DEV SECRET KEY")
     TESTING = False
+    DEBUG = True
 
 
 class TestingConfig(Config):

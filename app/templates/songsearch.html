@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    <div class="field">
+        {{ form.hidden_tag() }}
+        {{ form.search.label.class_("label") }} {{ form.search.class_("input") }}
+    </div>
+</form>
+{% endblock %}

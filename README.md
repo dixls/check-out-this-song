@@ -86,6 +86,8 @@ COTS will use a relational database similar to the one described in the image be
 * Flesh out proposed user flows
 * Test db models
 * start making forms and views
+* figure out main song logic
+* 
 
 
 ## Done
