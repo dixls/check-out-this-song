@@ -1,7 +1,7 @@
 import os
 
 from flask import jsonify
-from models import Song
+from app.models import Song
 import requests
 from dotenv import load_dotenv
 
@@ -22,12 +22,13 @@ class YTSearch:
             "key": os.getenv("YOUTUBE_KEY"),
         }
         self.root_url = "https://www.googleapis.com/youtube/v3/search"
+        self.results = self.get_results()
 
     def get_results(self):
         resp = requests.get(self.root_url, self.params)
         youtube_results = resp.json()
 
-        return jsonify(youtube_results)
+        return {"resp": resp, "result": youtube_results}
 
 
 class LastFMSearch:
@@ -43,9 +44,10 @@ class LastFMSearch:
             "api_key": os.getenv("LASTFM_KEY"),
         }
         self.root_url = "http://ws.audioscrobbler.com/2.0/"
+        self.results = self.get_results()
 
     def get_results(self):
         resp = requests.get(self.root_url, self.params)
-        lastfm_results = resp.json()
+        lastfm_results = jsonify(resp.json())
 
-        return jsonify(lastfm_results)
+        return {"resp": resp, "result": lastfm_results}

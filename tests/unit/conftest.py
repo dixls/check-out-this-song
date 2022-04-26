@@ -1,4 +1,5 @@
 from app.models import Song, User
+from app.search import YTSearch, LastFMSearch
 from app import create_app
 import pytest
 from app.extensions import db
@@ -51,3 +52,9 @@ def new_user():
 def persisted_user(new_user, test_db):
     test_db.session.add(new_user)
     test_db.session.commit()
+
+
+@pytest.fixture
+def test_search_lfm():
+    sanctuary_search = LastFMSearch("sanctuary")
+    return sanctuary_search
