@@ -11,7 +11,7 @@ def test_lastfm_search(test_search_lfm):
     """
     test_search_lfm
     test_resp = test_search_lfm.results['resp']
-    search_results = test_search_lfm.results['result']
+    matches = test_search_lfm.matches
 
     assert test_resp.ok
-    assert search_results
+    assert matches

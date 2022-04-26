@@ -52,7 +52,7 @@ def persisted_user(new_user, test_db):
 
 @pytest.fixture
 def test_search_lfm():
-    sanctuary_search = LastFMSearch("sanctuary")
+    sanctuary_search = LastFMSearch("sanctuary elder")
     return sanctuary_search
 
 

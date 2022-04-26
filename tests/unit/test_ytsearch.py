@@ -11,7 +11,7 @@ def test_yt_search(test_search_yt):
     """
     test_search_yt
     test_resp = test_search_yt.results['resp']
-    search_results = test_search_yt.results['result']
+    matches = test_search_yt.matches
 
     assert test_resp.ok
-    assert search_results
+    assert matches

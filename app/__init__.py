@@ -1,8 +1,10 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask
 from .views import main
 from .extensions import db, login_manager
 
+load_dotenv()
 
 def create_app(config_type="config.DevelopmentConfig"):
 

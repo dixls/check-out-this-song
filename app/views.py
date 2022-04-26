@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 import app.forms
 from app.models import User, Song
 from app.extensions import login_manager, db
+from app.search import YTSearch, LastFMSearch
 
 main = Blueprint("main", __name__)
 
@@ -12,6 +13,7 @@ def load_user(user_id):
 
 @main.route("/")
 def root():
+    
     return render_template("home.html")
 
 @main.route("/search")
