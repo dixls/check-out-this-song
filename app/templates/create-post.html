@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if matches %}
+<h1 class="title">Results for '<i>{{query}}</i>'</h1>
+<div class="columns is-multiline is-centered">
+    {% for match in matches[:5] %}
+    <div class="column is-three-quarters">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="{{match['image'][1]['#text']}}" alt="">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title">{{match['name']}}</p>
+                        <p class="subtitle"><i>by</i> {{match['artist']}}</p>
+                    </div>
+                    <div class="media-right">
+                        <span class="icon is-large">
+                            <a href="#" class="has-text-success">
+                                <i class="fas fa-2x fa-check-square"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <!-- <div class="content">
+                    {{match}}
+                </div> -->
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+no matches found
+{% endif %}
+{% endblock %}

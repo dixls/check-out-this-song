@@ -44,7 +44,7 @@ class LastFMSearch:
         }
         self.root_url = "http://ws.audioscrobbler.com/2.0/"
         self.results = self.get_results()
-        self.matches = self.results['result']['results']['trackmatches']
+        self.matches = self.results['result']['results']['trackmatches']['track']
 
     def get_results(self):
         resp = requests.get(self.root_url, self.params)

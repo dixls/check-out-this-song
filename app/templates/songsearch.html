@@ -1,10 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST">
-    <div class="field">
-        {{ form.hidden_tag() }}
-        {{ form.search.label.class_("label") }} {{ form.search.class_("input") }}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        <div class="card">
+            <div class="card-content">
+                <form method="POST">
+                    <div class="field">
+                        {{ form.hidden_tag() }}
+                        {{ form.search.label(class_="label") }} {{ form.search(class_="input") }}
+                    </div>
+                    <button type="submit" class="button">Search</button>
+                </form>
+            </div>
+        </div>
     </div>
-</form>
+</div>
 {% endblock %}
