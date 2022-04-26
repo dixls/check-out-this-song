@@ -40,11 +40,7 @@ def persisted_song(test_db, new_song):
 
 @pytest.fixture
 def new_user():
-    user = User(
-        username="test_user1",
-        email="user@text.com",
-        password="unhashed-pw"
-    )
+    user = User(username="test_user1", email="user@text.com", password="unhashed-pw")
     return user
 
 
@@ -58,3 +54,9 @@ def persisted_user(new_user, test_db):
 def test_search_lfm():
     sanctuary_search = LastFMSearch("sanctuary")
     return sanctuary_search
+
+
+@pytest.fixture
+def test_search_yt():
+    sanctuary_yt_search = YTSearch("sanctuary")
+    return sanctuary_yt_search
