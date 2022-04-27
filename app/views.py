@@ -49,7 +49,7 @@ def create_post():
         form.populate_obj(match)
         db.session.add(match)
         db.session.commit()
-        yt = YTSearch(match.title + match.artist)
+        yt = YTSearch(match.title + ' ' + match.artist)
         yt_matches = yt.matches
         yt_submit = app.forms.YTSubmitForm()
         session['new_post_id'] = match.id
@@ -67,3 +67,5 @@ def confirm_post():
         form.populate_obj(post)
         db.session.add(post)
         return render_template('confirm-post.html', post=post)
+    else:
+        return redirect(url_for('.search'))
