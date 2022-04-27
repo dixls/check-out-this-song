@@ -3,6 +3,11 @@
 {% block content %}
 {% if matches %}
 <h1 class="title">Results for '<i>{{query}}</i>'</h1>
+<span class="icon is-large">
+    <a href="{{url_for('main.search')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
 <div class="columns is-multiline is-centered">
     {% for match in matches[:5] %}
     <div class="column is-three-quarters">
@@ -18,13 +23,19 @@
                         <p class="title">{{match['name']}}</p>
                         <p class="subtitle"><i>by</i> {{match['artist']}}</p>
                     </div>
-                    <div class="media-right">
-                        <span class="icon is-large">
-                            <a href="#" class="has-text-success">
-                                <i class="fas fa-2x fa-check-square"></i>
-                            </a>
-                        </span>
-                    </div>
+                    <form action="{{url_for('main.create_post')}}" method="post">
+                        {{ form.csrf_token }}
+                        {{ form.title(value_=match['name']) }}
+                        {{ form.artist(value_=match['artist']) }}
+                        {{ form.lastfm_entry(value_=match['url']) }}
+                        <div class="media-right">
+                            <button type="submit" class="button is-success">
+                                <span class="icon is-large">
+                                    <i class="fas fa-2x fa-check"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <!-- <div class="content">
                     {{match}}

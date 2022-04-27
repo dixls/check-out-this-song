@@ -67,6 +67,8 @@ class Song(db.Model):
     other_url = db.Column(db.String)
     posts = db.relationship("Post", backref="song", lazy=True)
 
+    __repr__ = f"Song: {title} by {artist}"
+
 
 class Post(db.Model):
     """relationship table for each post"""

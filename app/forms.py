@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, BooleanField
+from wtforms import StringField, PasswordField, TextAreaField, BooleanField, HiddenField
 from wtforms.validators import DataRequired, Length, URL
 from wtforms_validators import AlphaNumeric
 
@@ -26,3 +26,11 @@ class SongSearchForm(FlaskForm):
     """Form to search for songs to post"""
 
     search = StringField("Search for a song title", validators=[DataRequired()])
+
+
+class SongSelectForm(FlaskForm):
+    """Form to select a song from results"""
+
+    title = HiddenField("Title")
+    artist = HiddenField("Artist")
+    lastfm_entry = HiddenField("Last FM URL")
