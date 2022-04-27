@@ -1,5 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{{match.title}} by {{match.artist}}
+<span class="icon is-large">
+    <a href="{{url_for('main.search')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
+<h1 class="title">Select a video for <i>{{match.title}}</i> by {{match.artist}}</h1>
+<div class="columns is-multiline is-centered">
+    {% if yt_matches %}
+    {% for video in yt_matches %}
+    <div class="column is-three-quarters">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="{{video['snippet']['thumbnails']['default']['url']}}" alt="">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title">{{video['snippet']['title']}}</p>
+                        <p class="subtitle"><i>uploaded by</i> {{video['snippet']['channelTitle']}}</p>
+                    </div>
+                    <!-- <div class="content">
+                {{video}}
+            </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+no matches found
+{% endif %}
 {% endblock %}

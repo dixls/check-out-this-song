@@ -47,6 +47,8 @@ def create_post():
 
     if form.validate_on_submit():
         form.populate_obj(match)
-        return render_template('create_post.html', match=match)
+        yt = YTSearch(match.title + match.artist)
+        yt_matches = yt.matches
+        return render_template('create_post.html', match=match, yt_matches=yt_matches)
     else:
         return redirect(url_for('.search'))
