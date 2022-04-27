@@ -10,23 +10,36 @@
 <div class="columns is-multiline is-centered">
     {% if yt_matches %}
     {% for video in yt_matches %}
-    <div class="column is-three-quarters">
+    <div class="column is-full-phone is-one-quarter">
         <div class="card">
+            <div class="card-image">
+                <figure class="image">
+                    <div class="container" style="position:relative; padding-bottom: 56.25%; padding-top: 30px; max-width: 100%; height:0; overflow:hidden">
+                    <iframe style="position:absolute; top: 0; left: 0; width:100%; height:100%" src="https://www.youtube.com/embed/{{video['id']['videoId']}}" title="YouTube video player"
+    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+                    </div>
+                </figure>
+            </div>
             <div class="card-content">
                 <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-48x48">
-                            <img src="{{video['snippet']['thumbnails']['default']['url']}}" alt="">
-                        </figure>
-                    </div>
                     <div class="media-content">
-                        <p class="title">{{video['snippet']['title']}}</p>
-                        <p class="subtitle"><i>uploaded by</i> {{video['snippet']['channelTitle']}}</p>
+                        <p class="title is-4">{{video['snippet']['title']}}</p>
+                        <p class="subtitle is-6"><i>uploaded by</i> {{video['snippet']['channelTitle']}}</p>
                     </div>
-                    <!-- <div class="content">
-                {{video}}
-            </div> -->
                 </div>
+                <form action="{{url_for('main.confirm_post')}}" method="post">
+                    {{ yt_submit.csrf_token }}
+                    {{ yt_submit.youtube_url(value_=video['id']['videoId']) }}
+                    <button type="submit" class="button is-success">
+                        <span class="icon is-large">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>
+                            Select this video
+                        </span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

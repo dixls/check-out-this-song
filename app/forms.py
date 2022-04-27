@@ -1,3 +1,4 @@
+from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, HiddenField
 from wtforms.validators import DataRequired, Length, URL
@@ -34,3 +35,9 @@ class SongSelectForm(FlaskForm):
     title = HiddenField("Title")
     artist = HiddenField("Artist")
     lastfm_entry = HiddenField("Last FM URL")
+
+
+class YTSubmitForm(FlaskForm):
+    """Form to add a youtube video to a song submission"""
+
+    youtube_url = HiddenField("Youtube URL")

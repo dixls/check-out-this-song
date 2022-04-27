@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<span class="icon is-large">
+    <a href="{{url_for('main.create_post')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
+<h1 class="title">How's this look?</h1>
+<div class="columns is-multiline is-centered">
+    <div class="column is-half-tablet">
+        <div class="card">
+            <div class="card-image">
+                {% include 'yt-embed.html' %}
+            </div>
+            <div class="card-content">
+                <p class="title is-4">{{ post.title }}</p>
+                <p class="subtitle is-6">by {{ post.artist }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

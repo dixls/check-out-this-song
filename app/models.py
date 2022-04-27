@@ -2,6 +2,7 @@ import bcrypt
 from .extensions import db
 from flask_bcrypt import Bcrypt
 
+bcrypt = Bcrypt()
 
 class User(db.Model):
     """user class"""
@@ -67,7 +68,8 @@ class Song(db.Model):
     other_url = db.Column(db.String)
     posts = db.relationship("Post", backref="song", lazy=True)
 
-    __repr__ = f"Song: {title} by {artist}"
+    def __repr__(self):
+        return f"Song: {self.title} by {self.artist}"
 
 
 class Post(db.Model):

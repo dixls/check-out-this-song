@@ -17,6 +17,7 @@ class YTSearch:
             "part": "snippet",
             "type": "video",
             "q": query,
+            "videoEmbeddable": True,
             "key": os.getenv("YOUTUBE_KEY"),
         }
         self.root_url = "https://www.googleapis.com/youtube/v3/search"
