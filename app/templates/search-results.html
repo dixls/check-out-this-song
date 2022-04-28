@@ -23,7 +23,7 @@
                         <p class="title">{{match['name']}}</p>
                         <p class="subtitle"><i>by</i> {{match['artist']}}</p>
                     </div>
-                    <form action="{{url_for('main.create_post')}}" method="post">
+                    <form action="{{url_for('main.video_select')}}" method="post">
                         {{ form.csrf_token }}
                         {{ form.title(value_=match['name']) }}
                         {{ form.artist(value_=match['artist']) }}

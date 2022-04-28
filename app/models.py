@@ -80,6 +80,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
+    description = db.Column(db.String)
     timestamp = db.Column(db.DateTime, nullable=False)
 
 

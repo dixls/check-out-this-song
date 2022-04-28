@@ -41,3 +41,10 @@ class YTSubmitForm(FlaskForm):
     """Form to add a youtube video to a song submission"""
 
     youtube_url = HiddenField("Youtube URL")
+
+
+class PostSubmitForm(FlaskForm):
+    """Form for submitting a song as a post"""
+
+    description = TextAreaField("Why did you choose this track?")
+    song_id = HiddenField("song id")

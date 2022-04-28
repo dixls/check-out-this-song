@@ -16,13 +16,20 @@
             <div class="card-content">
                 <p class="title is-4">{{ song.title }}</p>
                 <p class="subtitle is-6">by {{ song.artist }}</p>
-                <form action="{{url_for('main.confirm_post')}}" method="post">
-                    {{ post_form.csrf_token }}
-                    {{ post_form.song_id(value_=song.id) }}
-                    <div class="field">
-                        {{ post_form.description.label(class_="label") }}
-                        {{ post_form.description(class_="textarea", placeholder_="Check out this song!") }}
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="{{user.avatar}}" alt="">
+                        </figure>
                     </div>
+                    <div class="media-content">
+                        <p class="title">{{user.username}}</p>
+                    </div>
+                </div>
+                <div class="content">
+                    <p>{{ post.description }}</p>
+                </div>
+                <form action="" method="post"></form>
                     <button type="submit" class="button is-primary">Submit!</button>
                     <a href="/" class="button secondary">cancel</a>
                 </form>
