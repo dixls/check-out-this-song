@@ -1,6 +1,7 @@
 import bcrypt
 from .extensions import db
 from flask_bcrypt import Bcrypt
+from sqlalchemy.sql import func
 
 bcrypt = Bcrypt()
 
@@ -81,7 +82,7 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
     description = db.Column(db.String)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
 
 
 class Like(db.Model):

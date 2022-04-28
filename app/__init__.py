@@ -20,6 +20,8 @@ def create_app(config_type="config.DevelopmentConfig"):
     db.init_app(app)
     login_manager.init_app(app)
 
-    app.register_blueprint(main)
+    with app.app_context():
+        from . import views
+        app.register_blueprint(views.main)
 
-    return app
+        return app

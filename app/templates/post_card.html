@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-image">
+        {% include 'yt-embed-feed.html' %}
+    </div>
+    <div class="card-content">
+        <p class="title is-4">{{ post.song.title }}</p>
+        <p class="subtitle is-6">by {{ post.song.artist }}</p>
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-48x48">
+                    <img src="{{ post.user.avatar }}" alt="">
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="title">{{ post.user.username }}</p>
+            </div>
+        </div>
+        <div class="content">
+            <p>{{ post.description }}</p>
+        </div>
+    </div>
+</div>

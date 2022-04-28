@@ -4,4 +4,13 @@
     welcome Home
 </h1>
 <a href="/search">submit a song</a>
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        {% if posts %}
+        {% for post in posts %}
+        {% include 'post_card.html' %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
