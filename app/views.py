@@ -8,10 +8,11 @@ from flask import (
     jsonify,
     flash
 )
-import app.forms
-from app.models import User, Song, Post
-from app.extensions import login_manager, db
+from app.models import User, Song, Post, db
+from app import login_manager
 from app.search import YTSearch, LastFMSearch
+from flask import current_app as app
+import app.forms
 
 main = Blueprint("main", __name__)
 
@@ -27,6 +28,7 @@ def root():
     posts = Post.query.all()
     if "new_song" in session:
         session.pop("new_song")
+    
     return render_template("home.html", posts=posts)
 
 
@@ -103,7 +105,7 @@ def confirm_post():
         new_post = Post(song_id=song.id, description=description, user_id=user.id)
         db.session.add(new_post)
         db.session.flush()
-        
+        db.session.commit()
         return render_template("confirm_post.html", post=new_post, user=user, song=song)
     else:
         return redirect("/")

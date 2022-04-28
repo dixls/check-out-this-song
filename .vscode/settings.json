@@ -1,5 +1,7 @@
 {
     "cSpell.ignoreWords": [
-        "Embeddable"
+        "Embeddable",
+        "dotenv",
+        "wtforms"
     ]
 }

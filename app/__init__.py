@@ -1,10 +1,15 @@
 import os
+from os import environ, path
 from dotenv import load_dotenv
 from flask import Flask
-from .views import main
-from .extensions import db, login_manager
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
-load_dotenv()
+basedir = os.path.abspath(path.dirname(__file__))
+load_dotenv(path.join(basedir, '.env'))
+db = SQLAlchemy()
+login_manager = LoginManager()
+
 
 def create_app(config_type="config.DevelopmentConfig"):
 
@@ -22,6 +27,7 @@ def create_app(config_type="config.DevelopmentConfig"):
 
     with app.app_context():
         from . import views
+        db.create_all()
         app.register_blueprint(views.main)
 
         return app

@@ -1,5 +1,4 @@
 import os
-from app.models import Song
 import requests
 from dotenv import load_dotenv
 

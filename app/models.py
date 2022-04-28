@@ -1,5 +1,5 @@
 import bcrypt
-from .extensions import db
+from . import db
 from flask_bcrypt import Bcrypt
 from sqlalchemy.sql import func
 
@@ -24,6 +24,9 @@ class User(db.Model):
     is_authenticated = db.Column(db.Boolean)
     is_active = db.Column(db.Boolean)
     is_anonymous = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return f"User #{self.id}: {self.username}"
 
     @classmethod
     def get_id(self):
