@@ -28,7 +28,8 @@ def root():
     posts = Post.query.all()
     if "new_song" in session:
         session.pop("new_song")
-    
+    if "post_desc" in session:
+        session.pop("post_desc")
     return render_template("home.html", posts=posts)
 
 
@@ -98,22 +99,23 @@ def confirm_post():
         description = post_form.description.data
         song_id = post_form.song_id.data
         new_song = session["new_song"]
-        song = Song(title=new_song['title'], artist=new_song['artist'], lastfm_entry=new_song['lastfm_entry'], youtube_url=new_song['youtube_url'])
-        db.session.add(song)
         user = User.query.get_or_404(1)
         # placeholder user, add logic to get actual user when users implemented
-        new_post = Post(song_id=song.id, description=description, user_id=user.id)
-        db.session.add(new_post)
-        db.session.flush()
-        db.session.commit()
-        return render_template("confirm_post.html", post=new_post, user=user, song=song)
+        session["post_desc"] = description
+        return render_template("confirm_post.html", description=description, user=user, song=new_song)
     else:
         return redirect("/")
 
 
 @main.route("/submit")
 def submit():
-    
+    new_song = session["new_song"]
+    description = session["post_desc"]
+    song = Song(title=new_song['title'], artist=new_song['artist'], lastfm_entry=new_song['lastfm_entry'], youtube_url=new_song['youtube_url'])
+    db.session.add(song)
+    user = User.query.get_or_404(1)
+    new_post = Post(song_id=song.id, description=description, user_id=user.id)
+    db.session.add(new_post)
     db.session.commit()
     flash('posted successfully')
     return redirect('/')

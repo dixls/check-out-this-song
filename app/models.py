@@ -1,9 +1,11 @@
+from builtins import classmethod
 import bcrypt
 from . import db
 from flask_bcrypt import Bcrypt
 from sqlalchemy.sql import func
 
 bcrypt = Bcrypt()
+
 
 class User(db.Model):
     """user class"""
@@ -14,7 +16,7 @@ class User(db.Model):
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)
-    avatar = db.Column(db.String)
+    avatar = db.Column(db.String, default="/static/user_icon-01.png")
     bio = db.Column(db.String)
     admin = db.Column(db.Boolean, default=False)
     songs = db.relationship("Song", secondary="posts", backref="users")
@@ -49,7 +51,7 @@ class User(db.Model):
 
         db.session.add(user)
         return user
-    
+
     @classmethod
     def authenticate(cls, username, password):
         """
@@ -86,6 +88,13 @@ class Post(db.Model):
     song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
     description = db.Column(db.String)
     timestamp = db.Column(db.DateTime, server_default=func.now())
+
+    def __repr__(self):
+        return f"post {self.id} by {self.user.username}"
+
+    def date_format(self):
+        date = self.timestamp.date()
+        return f"{date.strftime('%B')} {date.day}, {date.year}"
 
 
 class Like(db.Model):

@@ -1,18 +1,34 @@
-<div class="card">
+<div class="card m-3">
+    <div class="media p-2 m-0">
+        <div class="media-left">
+            <figure class="image is-48x48">
+                <img src="{{ post.user.avatar }}" alt="">
+            </figure>
+        </div>
+        <div class="media-content">
+            <p class="title is-4">{{ post.user.username }}</p>
+        </div>
+    </div>
     <div class="card-image">
         {% include 'yt-embed-feed.html' %}
     </div>
     <div class="card-content">
-        <p class="title is-4">{{ post.song.title }}</p>
-        <p class="subtitle is-6">by {{ post.song.artist }}</p>
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-48x48">
-                    <img src="{{ post.user.avatar }}" alt="">
-                </figure>
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <div>
+                        <p class="title is-4">{{ post.song.title }}</p>
+                        <p class="heading is-6">by {{ post.song.artist }}</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-content">
-                <p class="title">{{ post.user.username }}</p>
+            <div class="level-right">
+                <div class="level-item">
+                    <div>
+                        <p class="level-right heading is-6">posted</p>
+                        <p class="level-right heading is-6">{{ post.date_format() }}</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="content">
