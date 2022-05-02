@@ -6,10 +6,12 @@ from flask import (
     request,
     session,
     jsonify,
-    flash
+    flash,
+    abort,
 )
 from app.models import User, Song, Post, db
 from app import login_manager
+from flask_login import login_required, login_user, logout_user
 from app.search import YTSearch, LastFMSearch
 from flask import current_app as app
 import app.forms
@@ -17,29 +19,40 @@ import app.forms
 main = Blueprint("main", __name__)
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    try:
+        return User.query.get(user_id)
+    except:
+        return None
 
 
 @main.route("/login", methods=["GET", "POST"])
 def login():
     form = app.forms.LoginForm()
-    raise
     if form.validate_on_submit():
         username = form.username.data
-        try:
-            User.query.filter_by(username=username)
+        if User.query.filter_by(username=username).first():
             user = User.authenticate(form.username.data, form.password.data)
             if user:
-                login(user)
+                login_user(user)
                 flash(f"Welcome back {username}", "success")
-                return redirect(url_for(".root"))
+
+                next = request.args.get("next")
+                # if not is_safe_url(next):
+                #     return abort(400)
+                # need to implement is_safe_url function for redirects
+                return redirect(next or url_for(".root"))
             flash("Invalid credentials", "danger")
-        except:
+        else:
             flash("Username not found", "danger")
     return render_template("login.html", form=form)
+
+
+@main.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for(".root"))
 
 
 @main.route("/")
@@ -54,6 +67,7 @@ def root():
 
 
 @main.route("/search", methods=["GET", "POST"])
+@login_required
 def search():
     form = app.forms.SongSearchForm()
 
@@ -122,7 +136,9 @@ def confirm_post():
         user = User.query.get_or_404(1)
         # placeholder user, add logic to get actual user when users implemented
         session["post_desc"] = description
-        return render_template("confirm_post.html", description=description, user=user, song=new_song)
+        return render_template(
+            "confirm_post.html", description=description, user=user, song=new_song
+        )
     else:
         return redirect("/")
 
@@ -131,11 +147,16 @@ def confirm_post():
 def submit():
     new_song = session["new_song"]
     description = session["post_desc"]
-    song = Song(title=new_song['title'], artist=new_song['artist'], lastfm_entry=new_song['lastfm_entry'], youtube_url=new_song['youtube_url'])
+    song = Song(
+        title=new_song["title"],
+        artist=new_song["artist"],
+        lastfm_entry=new_song["lastfm_entry"],
+        youtube_url=new_song["youtube_url"],
+    )
     db.session.add(song)
     user = User.query.get_or_404(1)
     new_post = Post(song_id=song.id, description=description, user_id=user.id)
     db.session.add(new_post)
     db.session.commit()
-    flash('posted successfully')
-    return redirect('/')
+    flash("posted successfully")
+    return redirect("/")

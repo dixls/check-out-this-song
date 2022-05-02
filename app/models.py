@@ -15,9 +15,9 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    users = db.relationship("User", back_populates="posts", lazy=True)
+    user = db.relationship("User", back_populates="posts", lazy=True)
     song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
-    songs = db.relationship("Song", back_populates="posts", lazy=True)
+    song = db.relationship("Song", back_populates="posts", lazy=True)
     description = db.Column(db.String)
     timestamp = db.Column(db.DateTime, server_default=func.now())
 
@@ -69,7 +69,7 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, default=False)
     songs = db.relationship("Song", secondary="posts", viewonly=True)
     liked_posts = db.relationship("Post", secondary="likes", backref="users_liked")
-    posts = db.relationship("Post", back_populates="users", lazy=True)
+    posts = db.relationship("Post", back_populates="user", lazy=True)
 
     followers = db.relationship(
         "User",
@@ -86,15 +86,19 @@ class User(UserMixin, db.Model):
         secondaryjoin=(Follow.user_followed == id),
         overlaps="followers, users"
     )
+    
+    def is_authenticated(self):
+        return True
 
-    is_authenticated = db.Column(db.Boolean)
-    is_active = db.Column(db.Boolean)
-    is_anonymous = db.Column(db.Boolean)
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
 
     def __repr__(self):
         return f"User #{self.id}: {self.username}"
 
-    @classmethod
     def get_id(self):
         return f"{self.id}"
 
@@ -144,7 +148,7 @@ class Song(db.Model):
     youtube_url = db.Column(db.String)
     lastfm_entry = db.Column(db.String)
     other_url = db.Column(db.String)
-    posts = db.relationship("Post", back_populates="songs", lazy=True)
+    posts = db.relationship("Post", back_populates="song", lazy=True)
     users = db.relationship("User", secondary="posts", viewonly=True)
 
     def __repr__(self):
