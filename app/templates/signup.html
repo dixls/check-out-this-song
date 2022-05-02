@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        <div class="card">
+            <div class="card-content">
+                <form method="POST">
+                    <div class="field">
+                        {{ form.csrf_token }}
+                        {{ form.username.label(class_="label") }}
+                        {{ form.username(class_="input", placeholder_="username") }}
+                        {% for error in form.username.errors %}
+                        <p class="help is-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="field">
+                        {{ form.email.label(class_="label") }}
+                        {{ form.email(class_="input", placeholder_="user@domain.com") }}
+                        {% for error in form.email.errors %}
+                        <p class="help is-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="field">
+                        {{ form.password.label(class_="label") }}
+                        {{ form.password(class_="input", placeholder_="password") }}
+                        {% for error in form.password.errors %}
+                        <p class="help is-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="field">
+                        {{ form.avatar.label(class_="label") }}
+                        {{ form.avatar(class_="input", placeholder_="https://domain.com/image.jpg") }}
+                        {% for error in form.avatar.errors %}
+                        <p class="help is-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="field">
+                        {{ form.bio.label(class_="label") }}
+                        {{ form.bio(class_="input textarea", rows_="3", placeholder_="I love music!") }}
+                        {% for error in form.bio.errors %}
+                        <p class="help is-danger">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="button is-success">Sign Up!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

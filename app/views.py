@@ -1,3 +1,4 @@
+import email
 from flask import (
     Blueprint,
     render_template,
@@ -11,12 +12,16 @@ from flask import (
 )
 from app.models import User, Song, Post, db
 from app import login_manager
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 from app.search import YTSearch, LastFMSearch
 from flask import current_app as app
+from sqlalchemy import exc
 import app.forms
 
 main = Blueprint("main", __name__)
+
+login_manager.login_view = "main.login"
+login_manager.login_message_category = "danger"
 
 
 @login_manager.user_loader
@@ -55,6 +60,41 @@ def logout():
     return redirect(url_for(".root"))
 
 
+@main.route("/signup", methods=["GET", "POST"])
+def signup():
+    form = app.forms.SignupForm()
+
+    if form.validate_on_submit():
+        try:
+            if form.avatar.data == '':
+                avatar=None
+            else:
+                avatar=form.avatar.data
+            new_user = User.signup(
+                username=form.username.data,
+                password=form.password.data,
+                email=form.email.data,
+                avatar=avatar,
+                bio=form.bio.data,
+            )
+            db.session.commit()
+            flash("Welcome to Check Out This Song!", "success")
+
+        except exc.IntegrityError as error:
+            if "username" in str(error.orig):
+                flash("That username is already taken!", "danger")
+            if "email" in str(error.orig):
+                flash("An account already exists for that email address please login", "warning")
+                
+            return render_template("signup.html", form=form)
+
+        login_user(new_user)
+        return redirect(url_for(".root"))
+
+    else:
+        return render_template("signup.html", form=form)
+
+
 @main.route("/")
 def root():
     db.session.rollback()
@@ -79,6 +119,7 @@ def search():
 
 
 @main.route("/search-results")
+@login_required
 def search_results():
     query = request.args.get("q")
     lfm = LastFMSearch(query)
@@ -92,6 +133,7 @@ def search_results():
 
 
 @main.route("/video-select", methods=["GET", "POST"])
+@login_required
 def video_select():
     match = dict(title="", artist="")
     form = app.forms.SongSelectForm(obj=match)
@@ -112,6 +154,7 @@ def video_select():
 
 
 @main.route("/create-post", methods=["GET", "POST"])
+@login_required
 def create_post():
     new_song = session["new_song"]
     form = app.forms.YTSubmitForm(obj=new_song)
@@ -126,15 +169,14 @@ def create_post():
 
 
 @main.route("/confirm-post", methods=["GET", "POST"])
+@login_required
 def confirm_post():
     post_form = app.forms.PostSubmitForm()
 
     if post_form.validate_on_submit():
         description = post_form.description.data
-        song_id = post_form.song_id.data
         new_song = session["new_song"]
-        user = User.query.get_or_404(1)
-        # placeholder user, add logic to get actual user when users implemented
+        user = User.query.get_or_404(current_user.id)
         session["post_desc"] = description
         return render_template(
             "confirm_post.html", description=description, user=user, song=new_song
@@ -154,7 +196,7 @@ def submit():
         youtube_url=new_song["youtube_url"],
     )
     db.session.add(song)
-    user = User.query.get_or_404(1)
+    user = User.query.get_or_404(current_user.id)
     new_post = Post(song_id=song.id, description=description, user_id=user.id)
     db.session.add(new_post)
     db.session.commit()

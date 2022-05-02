@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, HiddenField
-from wtforms.validators import DataRequired, Length, URL
+from wtforms.validators import Length, URL, InputRequired, Optional
 from wtforms_validators import AlphaNumeric
 
 
@@ -11,28 +11,28 @@ class SignupForm(FlaskForm):
     username = StringField(
         "Username",
         validators=[
-            DataRequired(),
+            InputRequired(),
             AlphaNumeric(message="username can only contain letters and numbers"),
         ],
     )
-    email = StringField("E-mail Address", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    email = StringField("E-mail Address", validators=[InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=8)])
     bio = TextAreaField("Bio")
-    avatar = StringField("Profile Picture URL", validators=[URL()])
+    avatar = StringField("Profile Picture URL", validators=[URL(require_tld=True, message="Please use a valid URL"), Optional()])
 
 
 class LoginForm(FlaskForm):
     """Form for existing users to login"""
 
-    username = StringField("Username or E-mail Address", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    username = StringField("Username or E-mail Address", validators=[InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired()])
     remember = BooleanField("Stay logged in?")
 
 
 class SongSearchForm(FlaskForm):
     """Form to search for songs to post"""
 
-    search = StringField("Search for a song title", validators=[DataRequired()])
+    search = StringField("Search for a song title", validators=[InputRequired()])
 
 
 class SongSelectForm(FlaskForm):
