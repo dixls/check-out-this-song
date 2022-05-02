@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        <div class="card">
+            <div class="card-content">
+                <form method="POST">
+                    <div class="field">
+                        {{ form.hidden_tag() }}
+                        {{ form.username.label(class_="label") }}
+                        {{ form.username(class_="input") }}
+                        {{ form.password.label(class_="label") }}
+                        {{ form.password(class_="input") }}
+                    </div>
+                    <button type="submit" class="button">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,6 +19,8 @@ class Config:
     LASTFM_KEY = os.getenv("LASTFM_KEY", default="")
     LASTFM_SECRET = os.getenv("LASTFM_SECRET", default="")
     YOUTUBE_KEY = os.getenv("YOUTUBE_KEY", default="")
+    BCRYPT_LOG_ROUNDS = 14
+    BCRYPT_HANDLE_LONG_PASSWORDS = True
 
 
 class DevelopmentConfig(Config):

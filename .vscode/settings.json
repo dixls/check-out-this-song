@@ -2,6 +2,8 @@
     "cSpell.ignoreWords": [
         "Embeddable",
         "dotenv",
+        "lastfm",
+        "ondelete",
         "wtforms"
     ]
 }

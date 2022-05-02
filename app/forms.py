@@ -8,7 +8,13 @@ from wtforms_validators import AlphaNumeric
 class SignupForm(FlaskForm):
     """Form for a new user to sign up"""
 
-    username = StringField("Username", validators=[DataRequired(), AlphaNumeric(message="username can only contain letters and numbers")])
+    username = StringField(
+        "Username",
+        validators=[
+            DataRequired(),
+            AlphaNumeric(message="username can only contain letters and numbers"),
+        ],
+    )
     email = StringField("E-mail Address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
     bio = TextAreaField("Bio")

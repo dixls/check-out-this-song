@@ -17,9 +17,29 @@ import app.forms
 main = Blueprint("main", __name__)
 
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
+
+@main.route("/login", methods=["GET", "POST"])
+def login():
+    form = app.forms.LoginForm()
+    raise
+    if form.validate_on_submit():
+        username = form.username.data
+        try:
+            User.query.filter_by(username=username)
+            user = User.authenticate(form.username.data, form.password.data)
+            if user:
+                login(user)
+                flash(f"Welcome back {username}", "success")
+                return redirect(url_for(".root"))
+            flash("Invalid credentials", "danger")
+        except:
+            flash("Username not found", "danger")
+    return render_template("login.html", form=form)
 
 
 @main.route("/")

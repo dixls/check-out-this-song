@@ -3,25 +3,89 @@ import bcrypt
 from . import db
 from flask_bcrypt import Bcrypt
 from sqlalchemy.sql import func
+from flask_login import UserMixin
 
 bcrypt = Bcrypt()
 
 
-class User(db.Model):
+class Post(db.Model):
+    """relationship table for each post"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    users = db.relationship("User", back_populates="posts", lazy=True)
+    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
+    songs = db.relationship("Song", back_populates="posts", lazy=True)
+    description = db.Column(db.String)
+    timestamp = db.Column(db.DateTime, server_default=func.now())
+
+    def __repr__(self):
+        return f"post {self.id} by {self.user.username}"
+
+    def date_format(self):
+        date = self.timestamp.date()
+        return f"{date.strftime('%B')} {date.day}, {date.year}"
+
+
+class Like(db.Model):
+    """relationship table for likes"""
+
+    __tablename__ = "likes"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="cascade"), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
+
+
+class Follow(db.Model):
+    """relationship table for follows"""
+
+    __tablename__ = "follows"
+
+    user_following = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id", ondelete="cascade"),
+        primary_key=True,
+    )
+    user_followed = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id", ondelete="cascade"),
+        primary_key=True,
+    )
+
+
+class User(UserMixin, db.Model):
     """user class"""
 
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)
     avatar = db.Column(db.String, default="/static/user_icon-01.png")
     bio = db.Column(db.String)
     admin = db.Column(db.Boolean, default=False)
-    songs = db.relationship("Song", secondary="posts", backref="users")
+    songs = db.relationship("Song", secondary="posts", viewonly=True)
     liked_posts = db.relationship("Post", secondary="likes", backref="users_liked")
-    posts = db.relationship("Post", backref="user", lazy=True)
+    posts = db.relationship("Post", back_populates="users", lazy=True)
+
+    followers = db.relationship(
+        "User",
+        secondary="follows",
+        primaryjoin=(Follow.user_followed == id),
+        secondaryjoin=(Follow.user_following == id),
+        overlaps="following, users"
+    )
+
+    following = db.relationship(
+        "User",
+        secondary="follows",
+        primaryjoin=(Follow.user_following == id),
+        secondaryjoin=(Follow.user_followed == id),
+        overlaps="followers, users"
+    )
 
     is_authenticated = db.Column(db.Boolean)
     is_active = db.Column(db.Boolean)
@@ -60,6 +124,14 @@ class User(db.Model):
         hopefully successfully checks against both username and password
         """
 
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+        return False
+
 
 class Song(db.Model):
     """table to organize songs that have been submitted"""
@@ -72,52 +144,8 @@ class Song(db.Model):
     youtube_url = db.Column(db.String)
     lastfm_entry = db.Column(db.String)
     other_url = db.Column(db.String)
-    posts = db.relationship("Post", backref="song", lazy=True)
+    posts = db.relationship("Post", back_populates="songs", lazy=True)
+    users = db.relationship("User", secondary="posts", viewonly=True)
 
     def __repr__(self):
         return f"Song: {self.title} by {self.artist}"
-
-
-class Post(db.Model):
-    """relationship table for each post"""
-
-    __tablename__ = "posts"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
-    description = db.Column(db.String)
-    timestamp = db.Column(db.DateTime, server_default=func.now())
-
-    def __repr__(self):
-        return f"post {self.id} by {self.user.username}"
-
-    def date_format(self):
-        date = self.timestamp.date()
-        return f"{date.strftime('%B')} {date.day}, {date.year}"
-
-
-class Like(db.Model):
-    """relationship table for likes"""
-
-    __tablename__ = "likes"
-
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
-
-
-class Follow(db.Model):
-    """relationship table for follows"""
-
-    __tablename__ = "follows"
-
-    user_following = db.Column(
-        db.Integer,
-        db.ForeignKey("users.id", ondelete="cascade"),
-        primary_key=True,
-    )
-    user_followed = db.Column(
-        db.Integer,
-        db.ForeignKey("users.id", ondelete="cascade"),
-        primary_key=True,
-    )
