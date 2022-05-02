@@ -108,11 +108,12 @@ def root():
         b = default
         page = None
     posts = Post.query.order_by(Post.timestamp.desc()).slice(a,b)
+    num_posts = posts.count()
     if "new_song" in session:
         session.pop("new_song")
     if "post_desc" in session:
         session.pop("post_desc")
-    return render_template("home.html", posts=posts, page=page)
+    return render_template("home.html", posts=posts, page=page, default=default, num_posts=num_posts)
 
 
 @main.route("/search", methods=["GET", "POST"])
