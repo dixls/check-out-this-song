@@ -85,7 +85,7 @@ def signup():
                 flash("That username is already taken!", "danger")
             if "email" in str(error.orig):
                 flash("An account already exists for that email address please login", "warning")
-                
+
             return render_template("signup.html", form=form)
 
         login_user(new_user)
@@ -98,12 +98,21 @@ def signup():
 @main.route("/")
 def root():
     db.session.rollback()
-    posts = Post.query.all()
+    default = 5
+    if request.args:
+        page = int(request.args.get("p"))
+        a = page * default
+        b = a+default
+    else:
+        a = 0
+        b = default
+        page = None
+    posts = Post.query.order_by(Post.timestamp.desc()).slice(a,b)
     if "new_song" in session:
         session.pop("new_song")
     if "post_desc" in session:
         session.pop("post_desc")
-    return render_template("home.html", posts=posts)
+    return render_template("home.html", posts=posts, page=page)
 
 
 @main.route("/search", methods=["GET", "POST"])

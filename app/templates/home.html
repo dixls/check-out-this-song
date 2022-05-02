@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="title">
-    welcome Home
-</h1>
-<a href="/search">submit a song</a>
+<section class="hero">
+    <div class="hero-body ">
+        <h1 class="title is-2 has-text-weight-bold">
+            Check Out This Song!
+        </h1>
+        <p class="subtitle">
+            A nice place to share songs with your friends!
+        </p>
+    </div>
+</section>
 <div class="columns is-tablet is-centered">
     <div class="column is-half">
         {% if posts %}
@@ -11,6 +17,48 @@
         {% include 'post_card.html' %}
         {% endfor %}
         {% endif %}
+        <div class="columns is-centered">
+            {% if page %}
+            <div class="column has-text-centered">
+                {% if page == 1 %}
+                <a href="/" class="button">
+                    {% else %}
+                    <a href="/?p={{page-1}}" class="button">
+                        {% endif %}
+                        <span class="icon">
+                            <i class="fas fa-angle-left"></i>
+                        </span>
+                        <span>
+                            Newer
+                        </span>
+                    </a>
+            </div>
+            <div class="column"></div>
+            <div class="column has-text-centered">
+                <a href="/?p={{page+1}}" class="button">
+                    <span>
+                        Older
+                    </span>
+                    <span class="icon">
+                        <i class="fas fa-angle-right"></i>
+                    </span>
+                </a>
+            </div>
+            {% else %}
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column has-text-centered">
+                <a href="/?p=1" class="button">
+                    <span>
+                        Older
+                    </span>
+                    <span class="icon">
+                        <i class="fas fa-angle-right"></i>
+                    </span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
