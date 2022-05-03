@@ -10,10 +10,16 @@
                         {{ form.hidden_tag() }}
                         {{ form.username.label(class_="label") }}
                         {{ form.username(class_="input") }}
+                    </div>
+                    <div class="field">
                         {{ form.password.label(class_="label") }}
                         {{ form.password(class_="input") }}
                     </div>
+                    <div class="field">
+                        {{ form.remember }} {{ form.remember.label }}
+                    </div>
                     <button type="submit" class="button">Login</button>
+                    <a href="{{url_for('main.signup')}}" class="is-size-7">Don't have an account? Sign up!</a>
                 </form>
             </div>
         </div>

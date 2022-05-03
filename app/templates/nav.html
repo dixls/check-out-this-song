@@ -25,7 +25,7 @@
         <div class="navbar-item">
           <div class="buttons">
             {% if current_user.is_authenticated %}
-            <a href="#" class="navbar-item button is-dark">
+            <a href="/users/{{current_user.username}}" class="navbar-item button is-dark">
               <div class="level">
                 <figure class="image is_24x24 m-1">
                   <img src="{{current_user.avatar}}" alt="">

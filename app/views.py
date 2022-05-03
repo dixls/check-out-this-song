@@ -40,7 +40,10 @@ def login():
         if User.query.filter_by(username=username).first():
             user = User.authenticate(form.username.data, form.password.data)
             if user:
-                login_user(user)
+                if form.remember.data:
+                    login_user(user, remember=True)
+                else:
+                    login_user(user)
                 flash(f"Welcome back {username}", "success")
 
                 next = request.args.get("next")
@@ -114,6 +117,19 @@ def root():
     if "post_desc" in session:
         session.pop("post_desc")
     return render_template("home.html", posts=posts, page=page, default=default, num_posts=num_posts)
+
+
+@main.route("/users/<username>")
+def user_details(username):
+    try:
+        user = User.query.filter_by(username=username).first()
+    except:
+        abort(404)
+    match = False
+    if current_user == user:
+        match = True
+    posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).limit(1)
+    return render_template("user_details.html", user=user, match=match, posts=posts)
 
 
 @main.route("/search", methods=["GET", "POST"])
@@ -212,3 +228,8 @@ def submit():
     db.session.commit()
     flash("posted successfully")
     return redirect("/")
+
+
+@main.errorhandler(404)
+def not_found(e):
+    return render_template("404.html")

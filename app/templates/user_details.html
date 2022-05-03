@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        <div class="container is-half">
+            <div class="media p-2 m-0">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img src="{{ user.avatar }}" alt="">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-3">{{ user.username }}</p>
+                    <p class="subtitle"></p>
+                </div>
+                <div class="media-right">
+                    <div class="">
+                        {% if match %}
+                        <a href="#" class="button">
+                            Edit Profile
+                            <span class="icon">
+                                <i class="fas fa-gear"></i>
+                            </span>
+                        </a>
+                        {% else %}
+                        <a href="#" class="button">
+                            <span>
+                                Follow
+                            </span>
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p>{{ user.bio }}</p>
+                </div>
+            </div>
+        </div>
+        {% if posts %}
+        {% for post in posts %}
+        {% include 'post_card.html' %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

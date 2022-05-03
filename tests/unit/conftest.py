@@ -2,7 +2,7 @@ from app.models import Song, User
 from app.search import YTSearch, LastFMSearch
 from app import create_app
 import pytest
-from app.extensions import db
+from app import db
 
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def persisted_song(test_db, new_song):
 
 @pytest.fixture
 def new_user():
-    user = User(username="test_user1", email="user@text.com", password="unhashed-pw")
+    user = User.signup(username="test_user1", email="user@text.com", password="unhashed-pw")
     return user
 
 
@@ -48,6 +48,7 @@ def new_user():
 def persisted_user(new_user, test_db):
     test_db.session.add(new_user)
     test_db.session.commit()
+    return new_user
 
 
 @pytest.fixture

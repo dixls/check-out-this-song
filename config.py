@@ -36,6 +36,7 @@ class TestingConfig(Config):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     DEBUG_TB_ENABLED = False
     SECRET_KEY = "TEST SECRET KEY"
+    LOGIN_DISABLED = True
 
 
 class ProductionConfig(Config):
