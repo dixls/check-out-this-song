@@ -130,6 +130,17 @@ def user_details(username):
     return render_template("user_details.html", user=user, match=match, posts=posts)
 
 
+@main.route("/usersearch")
+def user_search():
+    if request.args:
+        query = request.args.get("q")
+        results = User.query.filter(User.username.like("%"+query+"%")).slice(0,15)
+    else:
+        query = None
+        results= None
+    return render_template("user_search.html", query=query, results=results)
+
+
 @main.route("/search", methods=["GET", "POST"])
 @login_required
 def search():

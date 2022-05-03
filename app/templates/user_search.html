@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        {% if query %}
+        <section class="hero is-small">
+            <div class="hero-body">
+        {% else %}
+        <section class="hero is-large">
+            <div class="hero-body">
+                <p class="title">Search for a user</p>
+        {% endif %}
+                    <form action="{{url_for('main.user_search')}}" method="get">
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                              <input name="q" class="input" type="text" placeholder="search...">
+                            </div>
+                            <div class="control">
+                              <button type="submit" class="button is-primary">
+                                  Search
+                              </button>
+                            </div>
+                          </div>
+                    </form>
+                </div>
+            </section>
+        {% if query %}
+        <div class="container is-half">
+            <div class="card m-3">
+                <div class="card-header">
+                    <p class="card-header-title title is-3">User search results for '<i>{{query}}</i>'</p>
+                </div>
+                
+                {% for user in results %}
+                <div class="card-block">
+                    <div class="card-content">
+                        <a href="/users/{{user.username}}">
+                        <div class="media p-2 m-0">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="{{ user.avatar }}" alt="">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <a href="/users/{{user.username}}">
+                                <p class="title is-4">{{ user.username }}</p>
+                            </div>
+                            {% if current_user.is_authenticated %}
+                            {% if user != current_user %}
+                            <div class="media-right">
+                                <a href="#" class="button">
+                                    <span>
+                                        Follow
+                                    </span>
+                                    <span class="icon">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

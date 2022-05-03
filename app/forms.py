@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, HiddenField
-from wtforms.validators import Length, URL, InputRequired, Optional
+from wtforms.validators import Length, URL, InputRequired, Optional, DataRequired
 from wtforms_validators import AlphaNumeric
 
 
@@ -54,3 +54,9 @@ class PostSubmitForm(FlaskForm):
 
     description = TextAreaField("Why did you choose this track?")
     song_id = HiddenField("song id")
+
+
+class UserSearchForm(FlaskForm):
+    """Form for searching for a user"""
+
+    query = StringField("Search", validators=[DataRequired()])
