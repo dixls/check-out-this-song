@@ -35,11 +35,12 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="card-content">
-                    <p>{{ user.bio }}</p>
-                </div>
+            </div>
+            <div class="card-content">
+                <p>{{ user.bio }}</p>
             </div>
         </div>
+        <h2 class="title is-4">{{user.username}}'s most recent post</h2>
         {% if posts %}
         {% for post in posts %}
         {% include 'post_card.html' %}

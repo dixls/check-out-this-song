@@ -16,6 +16,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from app.search import YTSearch, LastFMSearch
 from flask import current_app as app
 from sqlalchemy import exc
+from .pagination import pagination
 import app.forms
 
 main = Blueprint("main", __name__)
@@ -101,22 +102,19 @@ def signup():
 @main.route("/")
 def root():
     db.session.rollback()
-    default = 5
     if request.args:
         page = int(request.args.get("p"))
-        a = page * default
-        b = a+default
+        pages = pagination(page)
     else:
-        a = 0
-        b = default
-        page = None
-    posts = Post.query.order_by(Post.timestamp.desc()).slice(a,b)
+        page = 0
+        pages = pagination(page)
+    posts = Post.query.order_by(Post.timestamp.desc()).slice(pages["first_post_index"],(pages["last_post_index"]+1))
     num_posts = posts.count()
     if "new_song" in session:
         session.pop("new_song")
     if "post_desc" in session:
         session.pop("post_desc")
-    return render_template("home.html", posts=posts, page=page, default=default, num_posts=num_posts)
+    return render_template("home.html", posts=posts, page=page, items_per_page=pages["items_per_page"], num_posts=num_posts)
 
 
 @main.route("/users/<username>")
@@ -226,7 +224,7 @@ def submit():
     new_post = Post(song_id=song.id, description=description, user_id=user.id)
     db.session.add(new_post)
     db.session.commit()
-    flash("posted successfully")
+    flash("new song posted successfully!", "success")
     return redirect("/")
 
 

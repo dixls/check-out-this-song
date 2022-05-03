@@ -13,56 +13,11 @@
 <div class="columns is-tablet is-centered">
     <div class="column is-half">
         {% if posts %}
-        {% for post in posts %}
+        {% for post in posts[:items_per_page] %}
         {% include 'post_card.html' %}
         {% endfor %}
         {% endif %}
-        <div class="columns is-centered">
-            {% if page %}
-            <div class="column has-text-centered">
-                {% if page == 1 %}
-                <a href="/" class="button">
-                    {% else %}
-                    <a href="/?p={{page-1}}" class="button">
-                        {% endif %}
-                        <span class="icon">
-                            <i class="fas fa-angle-left"></i>
-                        </span>
-                        <span>
-                            Newer
-                        </span>
-                    </a>
-            </div>
-            <div class="column"></div>
-            {% if num_posts < default %}
-            <div class="column"></div>
-            {% else %}
-            <div class="column has-text-centered">
-                <a href="/?p={{page+1}}" class="button">
-                    <span>
-                        Older
-                    </span>
-                    <span class="icon">
-                        <i class="fas fa-angle-right"></i>
-                    </span>
-                </a>
-            </div>
-            {% endif %}
-        {% else %}
-        <div class="column"></div>
-        <div class="column"></div>
-        <div class="column has-text-centered">
-            <a href="/?p=1" class="button">
-                <span>
-                    Older
-                </span>
-                <span class="icon">
-                    <i class="fas fa-angle-right"></i>
-                </span>
-            </a>
-        </div>
-        {% endif %}
+        {% include 'pagination.html' %}
     </div>
-</div>
 </div>
 {% endblock %}
