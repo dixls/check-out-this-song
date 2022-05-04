@@ -130,6 +130,21 @@ def user_details(username):
     return render_template("user_details.html", user=user, match=match, posts=posts)
 
 
+@main.route("/edit-profile", methods=["GET", "POST"])
+@login_required
+def edit_user():
+    form = app.forms.SignupForm(obj=current_user)
+    if form.validate_on_submit():
+        user = User.authenticate(current_user.username, form.password.data)
+        if user:
+            form.populate_obj(user)
+            db.session.commit()
+            flash("Profile saved successfully", "success")
+            return redirect(url_for('.user_details', username=user.username))
+        flash("Incorrect password", "danger")
+    return render_template("edit_user.html", form=form, user=current_user)
+
+
 @main.route("/usersearch")
 def user_search():
     if request.args:
