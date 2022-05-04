@@ -120,7 +120,7 @@ def root():
 @main.route("/users/<username>")
 def user_details(username):
     try:
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).one()
     except:
         abort(404)
     match = False
