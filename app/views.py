@@ -257,3 +257,8 @@ def submit():
 @main.errorhandler(404)
 def not_found(e):
     return render_template("404.html")
+    
+
+@main.errorhandler(503)
+def not_found(e):
+    return render_template("503.html")
