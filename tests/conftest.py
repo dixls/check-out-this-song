@@ -1,5 +1,6 @@
 from app.models import Song, User
-from app import create_app
+from app import create_app, login_manager
+from flask_login import FlaskLoginClient
 import pytest
 from app import db
 
@@ -8,6 +9,7 @@ from app import db
 def test_app():
     app = create_app("config.TestingConfig")
     app.config.from_object("config.TestingConfig")
+    app.test_client_class = FlaskLoginClient
     return app
 
 
@@ -39,7 +41,9 @@ def persisted_song(test_db, new_song):
 
 @pytest.fixture
 def new_user():
-    user = User.signup(username="test_user1", email="user@text.com", password="unhashed-pw")
+    user = User.signup(
+        username="test_user1", email="user@text.com", password="unhashed-pw"
+    )
     return user
 
 
@@ -48,3 +52,10 @@ def persisted_user(new_user, test_db):
     test_db.session.add(new_user)
     test_db.session.commit()
     return new_user
+
+
+@pytest.fixture
+def test_with_authenticated_user(test_app, persisted_user):
+    with test_app.test_request_context():
+        yield flask_login.login_user(persisted_user)
+
