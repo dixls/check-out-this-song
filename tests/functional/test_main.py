@@ -100,23 +100,6 @@ def test_user_detail_page_404(client, app):
     assert b"404" in response.data
 
 
-def test_edit_user_get(app, test_db, persisted_user):
-    """
-    Given a registered user
-    When that user attempts to view the edit-profile page
-    Then the page should be found without a 404
-
-    I cannot get this one to work at all, I've tried a number of different ways to login a user, but it's unclear if they work, and if they do, none seem to let current_user function right.
-    """
-    with app.test_client(user=persisted_user) as test_client:
-        response = test_client.get("/edit-profile")
-
-    assert response.status_code == HTTPStatus.OK
-    assert current_user.id == persisted_user.id
-    assert b"404" not in response.data
-    assert b"503" not in response.data
-
-
 def test_user_search(client, app):
     response = client.get("/usersearch")
     assert b"Search for a user" in response.data
@@ -140,3 +123,21 @@ def test_song_search(client, app):
 def test_song_search_post(client, app):
     response = client.post("/search", data={"search": "song_title"})
     assert response.status_code == HTTPStatus.FOUND
+
+
+
+def test_edit_user_get(app, test_db, persisted_user):
+    """
+    Given a registered user
+    When that user attempts to view the edit-profile page
+    Then the page should be found without a 404
+
+    I cannot get this one to work at all, I've tried a number of different ways to login a user, but it's unclear if they work, and if they do, none seem to let current_user function right.
+    """
+    with app.test_client(user=persisted_user) as test_client:
+        response = test_client.get("/edit-profile")
+
+    assert response.status_code == HTTPStatus.OK
+    assert current_user.id == persisted_user.id
+    assert b"404" not in response.data
+    assert b"503" not in response.data

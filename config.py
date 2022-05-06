@@ -21,6 +21,7 @@ class Config:
     YOUTUBE_KEY = os.getenv("YOUTUBE_KEY", default="YOUTUBE_SECRET_KEY")
     BCRYPT_LOG_ROUNDS = 14
     BCRYPT_HANDLE_LONG_PASSWORDS = True
+    SESSION_PROTECTION = "basic"
 
 
 class DevelopmentConfig(Config):
@@ -32,11 +33,12 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://"
+    SQLALCHEMY_DATABASE_URI = "postgresql:///cots-test"
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     DEBUG_TB_ENABLED = False
     SECRET_KEY = "TEST SECRET KEY"
     LOGIN_DISABLED = True
+    SESSION_PROTECTION = None
 
 
 class ProductionConfig(Config):

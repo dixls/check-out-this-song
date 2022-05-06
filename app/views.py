@@ -24,6 +24,7 @@ main = Blueprint("main", __name__)
 
 login_manager.login_view = "main.login"
 login_manager.login_message_category = "danger"
+# login_manager.session_protection = app.config["SESSION_PROTECTION"]
 
 
 @login_manager.user_loader
@@ -253,6 +254,33 @@ def submit():
     db.session.commit()
     flash("new song posted successfully!", "success")
     return redirect("/")
+
+
+@main.route("/follow", methods=["POST"])
+@login_required
+def follow():
+    try:
+        user_to_follow = User.query.get(request.json["follow_user_id"])
+        user_following = User.query.get(request.json["current_user_id"])
+    except exc.SQLAlchemyError:
+        return False
+    user_following.following.append(user_to_follow)
+    db.session.commit()
+    return True
+
+
+@main.route("/unfollow", methods=["DELETE"])
+@login_required
+def unfollow():
+    try:
+        user_to_unfollow = User.query.get(request.json["follow_user_id"])
+        user_unfollowing = User.query.get(request.json["current_user_id"])
+    except exc.SQLAlchemyError:
+        return False
+    user_unfollowing.following.remove(user_to_unfollow)
+    db.session.commit()
+    return True
+
 
 
 @main.errorhandler(404)

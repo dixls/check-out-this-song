@@ -4,6 +4,8 @@
         "dotenv",
         "lastfm",
         "ondelete",
+        "unfollow",
+        "unfollowing",
         "wtforms"
     ],
     "python.testing.pytestArgs": [
