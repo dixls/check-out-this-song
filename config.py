@@ -16,9 +16,9 @@ class Config:
     FLASK_ENV = "development"
     WTF_CSRF_ENABLED = True
     SECRET_KEY = os.getenv("SECRET_KEY", default="DEFAULT SECRET KEY")
-    LASTFM_KEY = os.getenv("LASTFM_KEY", default="")
-    LASTFM_SECRET = os.getenv("LASTFM_SECRET", default="")
-    YOUTUBE_KEY = os.getenv("YOUTUBE_KEY", default="")
+    LASTFM_KEY = os.getenv("LASTFM_KEY", default="LAST_FM_KEY")
+    LASTFM_SECRET = os.getenv("LASTFM_SECRET", default="LAST_FM_SECRET")
+    YOUTUBE_KEY = os.getenv("YOUTUBE_KEY", default="YOUTUBE_SECRET_KEY")
     BCRYPT_LOG_ROUNDS = 14
     BCRYPT_HANDLE_LONG_PASSWORDS = True
 

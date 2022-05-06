@@ -10,6 +10,7 @@ from flask import (
     flash,
     abort,
 )
+from flask_sqlalchemy import SQLAlchemy
 from app.models import User, Song, Post, db
 from app import login_manager
 from flask_login import login_required, login_user, logout_user, current_user
@@ -29,7 +30,7 @@ login_manager.login_message_category = "danger"
 def load_user(user_id):
     try:
         return User.query.get(user_id)
-    except:
+    except exc.SQLAlchemyError:
         return None
 
 
@@ -121,7 +122,7 @@ def root():
 def user_details(username):
     try:
         user = User.query.filter_by(username=username).one()
-    except:
+    except exc.SQLAlchemyError:
         abort(404)
     match = False
     if current_user == user:

@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from flask import current_app as app
 
 load_dotenv()
 
@@ -17,7 +18,7 @@ class YTSearch:
             "type": "video",
             "q": query,
             "videoEmbeddable": True,
-            "key": os.getenv("YOUTUBE_KEY"),
+            "key": app.config["YOUTUBE_KEY"]
         }
         self.root_url = "https://www.googleapis.com/youtube/v3/search"
         self.results = self.get_results()
@@ -40,7 +41,7 @@ class LastFMSearch:
             "method": "track.search",
             "format": "json",
             "track": query,
-            "api_key": os.getenv("LASTFM_KEY"),
+            "api_key": app.config["LASTFM_KEY"],
         }
         self.root_url = "http://ws.audioscrobbler.com/2.0/"
         self.results = self.get_results()
