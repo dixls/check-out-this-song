@@ -309,6 +309,24 @@ def unlike_post():
     return True
 
 
+@main.route("/posts/delete", methods=["DELETE"])
+@login_required
+def delete_post():
+    try:
+        user = User.query.get(request.json["current_user_id"])
+        post_to_delete = Post.query.get(request.json["post_id"])
+    except exc.SQLAlchemyError:
+        return False
+    if user == post_to_delete.user:
+        try:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+            return True
+        except exc.SQLAlchemyError:
+            return False
+    abort(503)
+
+
 @main.errorhandler(404)
 def not_found(e):
     return render_template("404.html")

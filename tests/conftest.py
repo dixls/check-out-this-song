@@ -1,9 +1,6 @@
-from cgi import test
-
-import py
 from app.models import Song, User, Post
 from app import create_app, login_manager
-from flask_login import FlaskLoginClient
+from flask_login import FlaskLoginClient, login_user
 import pytest
 from app import db
 
@@ -100,4 +97,4 @@ def persisted_user_with_follow(persisted_user, persisted_2nd_user, test_db):
 @pytest.fixture
 def test_with_authenticated_user(test_app, persisted_user):
     with test_app.test_request_context():
-        yield flask_login.login_user(persisted_user)
+        yield login_user(persisted_user)
