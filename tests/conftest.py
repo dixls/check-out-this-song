@@ -6,7 +6,7 @@ from app import db
 
 
 @pytest.fixture
-def test_app():
+def app():
     app = create_app("config.TestingConfig")
     app.config.from_object("config.TestingConfig")
     app.test_client_class = FlaskLoginClient
@@ -14,7 +14,7 @@ def test_app():
 
 
 @pytest.fixture
-def test_db(test_app):
+def test_db(app):
     db.create_all()
     yield db
     db.session.close()
