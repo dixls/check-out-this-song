@@ -263,10 +263,10 @@ def follow():
         user_to_follow = User.query.get(request.json["follow_user_id"])
         user_following = User.query.get(request.json["current_user_id"])
         user_following.following.append(user_to_follow)
+        db.session.commit()
+        return True
     except exc.SQLAlchemyError:
         return False
-    db.session.commit()
-    return True
 
 
 @main.route("/unfollow", methods=["DELETE"])
@@ -276,10 +276,10 @@ def unfollow():
         user_to_unfollow = User.query.get(request.json["follow_user_id"])
         user_unfollowing = User.query.get(request.json["current_user_id"])
         user_unfollowing.following.remove(user_to_unfollow)
+        db.session.commit()
+        return True
     except exc.SQLAlchemyError:
         return False
-    db.session.commit()
-    return True
 
 
 @main.route("/posts/like", methods=["POST"])
@@ -289,11 +289,10 @@ def like_post():
         user_liking = User.query.get(request.json["current_user_id"])
         post_to_like = Post.query.get(request.json["post_id"])
         user_liking.liked_posts.append(post_to_like)
+        db.session.commit()
+        return True
     except exc.SQLAlchemyError:
         return False
-    db.session.commit()
-    return True
-    return True
 
 
 @main.route("/posts/unlike", methods=["DELETE"])
@@ -303,10 +302,10 @@ def unlike_post():
         user_unliking = User.query.get(request.json["current_user_id"])
         post_to_unlike = Post.query.get(request.json["post_id"])
         user_unliking.liked_posts.remove(post_to_unlike)
+        db.session.commit()
+        return True
     except exc.SQLAlchemyError:
         return False
-    db.session.commit()
-    return True
 
 
 @main.route("/posts/delete", methods=["DELETE"])
