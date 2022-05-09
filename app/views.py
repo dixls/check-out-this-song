@@ -10,12 +10,12 @@ from flask import (
     abort,
 )
 from flask_sqlalchemy import SQLAlchemy
-from app.models import User, Song, Post, db
+from app.models import User, Song, Post, db, Follow, metadata
 from app import login_manager
 from flask_login import login_required, login_user, logout_user, current_user
 from app.search import YTSearch, LastFMSearch
 from flask import current_app as app
-from sqlalchemy import exc
+from sqlalchemy import exc, or_, select
 from .pagination import pagination
 import app.forms
 
@@ -112,9 +112,24 @@ def root():
     else:
         page = 0
         pages = pagination(page)
-    posts = Post.query.order_by(Post.timestamp.desc()).slice(
-        pages["first_post_index"], (pages["last_post_index"] + 1)
-    )
+    if current_user.is_authenticated:
+        following_ids_query = db.session.execute(
+            select([Follow.user_followed]).where(
+                Follow.user_following == current_user.id
+            )
+        )
+        following_ids = [id[0] for id in following_ids_query]
+        posts = (
+            Post.query.filter(or_(Post.user_id.in_(following_ids), Post.user_id == current_user.id))
+            .order_by(Post.timestamp.desc())
+            .slice(pages["first_post_index"], (pages["last_post_index"] + 1))
+        )
+
+    else:
+        posts = Post.query.order_by(Post.timestamp.desc()).slice(
+            pages["first_post_index"], (pages["last_post_index"] + 1)
+        )
+
     num_posts = posts.count()
     if "new_song" in session:
         session.pop("new_song")

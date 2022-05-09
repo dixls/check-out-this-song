@@ -1,12 +1,13 @@
 from builtins import classmethod
 import bcrypt
+from sqlalchemy import MetaData
 from . import db
 from flask_bcrypt import Bcrypt
 from sqlalchemy.sql import func
 from flask_login import UserMixin
 
 bcrypt = Bcrypt()
-
+metadata = MetaData(bind=None)
 
 class Post(db.Model):
     """relationship table for each post"""

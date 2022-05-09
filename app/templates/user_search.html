@@ -48,8 +48,17 @@
                             </div>
                             {% if current_user.is_authenticated %}
                             {% if user != current_user %}
-                            <div class="media-right">
-                                <a href="#" class="button">
+                                {% if user in current_user.following %}
+                                <a href="#" class="button is-primary is-outlined unfollow-button" id="{{user.id}}">
+                                    <span>
+                                        Unfollow
+                                    </span>
+                                    <span class="icon">
+                                        <i class="fas fa-minus"></i>
+                                    </span>
+                                </a>
+                                {% else %}
+                                <a href="#" class="button is-primary follow-button" id="{{user.id}}">
                                     <span>
                                         Follow
                                     </span>
@@ -57,7 +66,7 @@
                                         <i class="fas fa-plus"></i>
                                     </span>
                                 </a>
-                            </div>
+                                {% endif %}
                             {% endif %}
                             {% endif %}
                         </div>
