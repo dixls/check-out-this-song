@@ -13,6 +13,7 @@ Flask-SQLAlchemy==2.5.1
 Flask-WTF==1.0.1
 git-filter-repo==2.34.0
 greenlet==1.1.2
+gunicorn==20.1.0
 idna==3.3
 importlib-metadata==4.11.3
 iniconfig==1.1.1
@@ -30,6 +31,7 @@ py==1.11.0
 pycparser==2.21
 pyparsing==3.0.8
 pytest==7.1.1
+pytest-flask==1.2.0
 python-dotenv==0.20.0
 requests==2.27.1
 six==1.16.0
