@@ -47,4 +47,19 @@
             <p>{{ post.description }}</p>
         </div>
     </div>
+    <footer class="card-footer">
+        {% if current_user == post.user or current_user.admin %}
+        <a href="#" class="card-footer-item" id="delete-{{post.id}}">
+            <span>
+                <i class="fas fa-trash"></i>
+            </span>
+        </a>
+        {% endif %}
+        <a href="#" class="card-footer-item" id="like-{{post.id}}">
+            <span>
+                <i class="fas fa-heart"></i>
+            </span>
+        </a>
+        
+    </footer>
 </div>
