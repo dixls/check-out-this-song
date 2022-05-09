@@ -15,7 +15,8 @@
                     <p class="subtitle"></p>
                 </div>
                 <div class="media-right">
-                    <div class="">
+                    <div>
+                        {% if current_user.is_authenticated %}
                         {% if match %}
                         <a href="{{url_for('main.edit_user')}}" class="button">
                             Edit Profile
@@ -43,6 +44,7 @@
                                 </span>
                             </a>
                             {% endif %}
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>

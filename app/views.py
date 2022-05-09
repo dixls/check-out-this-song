@@ -120,11 +120,12 @@ def root():
         )
         following_ids = [id[0] for id in following_ids_query]
         posts = (
-            Post.query.filter(or_(Post.user_id.in_(following_ids), Post.user_id == current_user.id))
+            Post.query.filter(
+                or_(Post.user_id.in_(following_ids), Post.user_id == current_user.id)
+            )
             .order_by(Post.timestamp.desc())
             .slice(pages["first_post_index"], (pages["last_post_index"] + 1))
         )
-
     else:
         posts = Post.query.order_by(Post.timestamp.desc()).slice(
             pages["first_post_index"], (pages["last_post_index"] + 1)

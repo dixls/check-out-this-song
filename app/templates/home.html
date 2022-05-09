@@ -10,6 +10,14 @@
         </p>
     </div>
 </section>
+{% if num_posts == 0 %}
+        <section class="hero is-medium">
+            <div class="hero-body">
+                <p class="title is-2">It doesn't look like you're following anyone</p>
+                <p class="subtitle">Try <a href="{{url_for('main.user_search')}}">searching for someone to follow</a></p>
+            </div>
+        </section>
+        {% endif %}
 <div class="columns is-tablet is-centered">
     <div class="column is-half">
         {% if posts %}
