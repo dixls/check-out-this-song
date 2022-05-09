@@ -6,7 +6,6 @@ from flask import (
     url_for,
     request,
     session,
-    jsonify,
     flash,
     abort,
 )
@@ -273,16 +272,16 @@ def submit():
 @login_required
 def follow():
     try:
-        user_to_follow = User.query.get(request.json["follow_user_id"])
-        user_following = User.query.get(request.json["current_user_id"])
+        user_to_follow = User.query.get(int(request.json["follow_user_id"]))
+        user_following = User.query.get(current_user.id)
         user_following.following.append(user_to_follow)
         db.session.commit()
-        return True
+        return {"response": True}
     except exc.SQLAlchemyError:
-        return False
+        return {"response": False}
 
 
-@main.route("/unfollow", methods=["DELETE"])
+@main.route("/unfollow", methods=["POST"])
 @login_required
 def unfollow():
     try:
@@ -290,9 +289,9 @@ def unfollow():
         user_unfollowing = User.query.get(current_user.id)
         user_unfollowing.following.remove(user_to_unfollow)
         db.session.commit()
-        return True
+        return {"response": True}
     except exc.SQLAlchemyError:
-        return False
+        return {"response": False}
 
 
 @main.route("/posts/like", methods=["POST"])

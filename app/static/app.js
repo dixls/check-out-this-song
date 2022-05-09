@@ -20,6 +20,34 @@ async function deletePost(postId, parent) {
     }
 }
 
+async function followUser(userId, target) {
+    const response = await axios.post('/follow', { "follow_user_id": userId })
+    if (response.data.response) {
+        target.removeClass("follow-button").empty().addClass("unfollow-button is-outlined").html(
+            `<span>
+                Unfollow
+            </span>
+            <span class="icon">
+                <i class="fas fa-minus"></i>
+            </span>`
+        )
+    }
+}
+
+async function unfollowUser(userId, target) {
+    const response = await axios.post('/unfollow', { "follow_user_id": userId })
+    if (response.data.response) {
+        target.removeClass("unfollow-button is-outlined").empty().addClass("follow-button").html(
+            `<span>
+                Follow
+            </span>
+            <span class="icon">
+                <i class="fas fa-plus"></i>
+            </span>`
+        )
+    }
+}
+
 async function handleClick(event) {
     const target = $(event.target)
     if (target.hasClass('like-button')) {
@@ -38,7 +66,27 @@ async function handleClick(event) {
         const postId = parent.attr('id')
         await deletePost(postId, parent)
     }
+    else if (target.hasClass('follow-button')) {
+        event.preventDefault()
+        const UserId = target.attr('id')
+        await followUser(UserId, target)
+    }
+    else if (target.parent().hasClass('follow-button')) {
+        event.preventDefault()
+        const UserId = target.parent().attr('id')
+        await followUser(UserId, target.parent())
+    }
+    else if (target.hasClass('unfollow-button')) {
+        event.preventDefault()
+        const UserId = target.attr('id')
+        await unfollowUser(UserId, target)
+    }
+    else if (target.parent().hasClass('unfollow-button')) {
+        event.preventDefault()
+        const UserId = target.parent().attr('id')
+        await unfollowUser(UserId, target.parent())
+    }
 }
-$( document ).ready(function() {
+$(document).ready(function () {
     $('body').on('click', 'a', handleClick)
 })
