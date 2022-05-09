@@ -1,4 +1,4 @@
-<div class="card m-3">
+<div class="card m-3" id="{{post.id}}">
     <div class="card-title m-0 p-2">
         <div class="level">
             <div class="level-left">
@@ -49,13 +49,17 @@
     </div>
     <footer class="card-footer">
         {% if current_user == post.user or current_user.admin %}
-        <a href="#" class="card-footer-item" id="delete-{{post.id}}">
+        <a href="#" class="card-footer-item delete-button">
             <span>
                 <i class="fas fa-trash"></i>
             </span>
         </a>
         {% endif %}
-        <a href="#" class="card-footer-item" id="like-{{post.id}}">
+        {% if post in current_user.liked_posts %}
+        <a href="#" class="card-footer-item unlike-button has-text-danger">
+        {% else %}
+        <a href="#" class="card-footer-item like-button">
+        {% endif %}
             <span>
                 <i class="fas fa-heart"></i>
             </span>

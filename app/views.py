@@ -273,8 +273,8 @@ def follow():
 @login_required
 def unfollow():
     try:
-        user_to_unfollow = User.query.get(request.json["follow_user_id"])
-        user_unfollowing = User.query.get(request.json["current_user_id"])
+        user_to_unfollow = User.query.get(int(request.json["follow_user_id"]))
+        user_unfollowing = User.query.get(current_user.id)
         user_unfollowing.following.remove(user_to_unfollow)
         db.session.commit()
         return True
@@ -283,37 +283,37 @@ def unfollow():
 
 
 @main.route("/posts/like", methods=["POST"])
-@login_required
 def like_post():
     try:
-        user_liking = User.query.get(request.json["current_user_id"])
-        post_to_like = Post.query.get(request.json["post_id"])
+        user_liking = User.query.get(current_user.id)
+        req = request.json
+        post_to_like = Post.query.get(int(req["post_id"]))
         user_liking.liked_posts.append(post_to_like)
         db.session.commit()
-        return True
+        return {"response": True}
     except exc.SQLAlchemyError:
-        return False
+        return {"response": False}
 
 
-@main.route("/posts/unlike", methods=["DELETE"])
-@login_required
+@main.route("/posts/unlike", methods=["POST"])
 def unlike_post():
     try:
-        user_unliking = User.query.get(request.json["current_user_id"])
-        post_to_unlike = Post.query.get(request.json["post_id"])
+        user_unliking = User.query.get(current_user.id)
+        req = request.json
+        post_to_unlike = Post.query.get(int(req["post_id"]))
         user_unliking.liked_posts.remove(post_to_unlike)
         db.session.commit()
-        return True
+        return {"response": True}
     except exc.SQLAlchemyError:
-        return False
+        return {"response": False}
 
 
 @main.route("/posts/delete", methods=["DELETE"])
 @login_required
 def delete_post():
     try:
-        user = User.query.get(request.json["current_user_id"])
-        post_to_delete = Post.query.get(request.json["post_id"])
+        user = User.query.get(current_user.id)
+        post_to_delete = Post.query.get(int(request.json["post_id"]))
     except exc.SQLAlchemyError:
         return False
     if user == post_to_delete.user:

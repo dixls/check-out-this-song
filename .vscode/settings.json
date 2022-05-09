@@ -6,6 +6,7 @@
         "ondelete",
         "unfollow",
         "unfollowing",
+        "unliking",
         "wtforms"
     ],
     "python.testing.pytestArgs": [
