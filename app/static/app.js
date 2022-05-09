@@ -1,4 +1,3 @@
-const $likeButton = $('#like-button')
 
 async function addLike(postId, target) {
     const response = await axios.post('/posts/like', { "post_id": postId })
@@ -14,6 +13,13 @@ async function removeLike(postId, target) {
     }
 }
 
+async function deletePost(postId, parent) {
+    const response = await axios.delete(`/posts/delete/${postId}`)
+    if (response.data.response) {
+        parent.remove()
+    }
+}
+
 async function handleClick(event) {
     const target = $(event.target)
     if (target.hasClass('like-button')) {
@@ -26,6 +32,13 @@ async function handleClick(event) {
         const postId = target.parent().parent().attr('id')
         await removeLike(postId, target)
     }
+    else if (target.hasClass('delete-button')) {
+        event.preventDefault()
+        const parent = target.parent().parent()
+        const postId = parent.attr('id')
+        await deletePost(postId, parent)
+    }
 }
-
-$('body').on('click', 'a', handleClick)
+$( document ).ready(function() {
+    $('body').on('click', 'a', handleClick)
+})

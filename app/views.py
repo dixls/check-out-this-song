@@ -72,10 +72,10 @@ def signup():
 
     if form.validate_on_submit():
         try:
-            if form.avatar.data == '':
-                avatar=None
+            if form.avatar.data == "":
+                avatar = None
             else:
-                avatar=form.avatar.data
+                avatar = form.avatar.data
             new_user = User.signup(
                 username=form.username.data,
                 password=form.password.data,
@@ -90,7 +90,10 @@ def signup():
             if "username" in str(error.orig):
                 flash("That username is already taken!", "danger")
             if "email" in str(error.orig):
-                flash("An account already exists for that email address please login", "warning")
+                flash(
+                    "An account already exists for that email address please login",
+                    "warning",
+                )
 
             return render_template("signup.html", form=form)
 
@@ -110,13 +113,21 @@ def root():
     else:
         page = 0
         pages = pagination(page)
-    posts = Post.query.order_by(Post.timestamp.desc()).slice(pages["first_post_index"],(pages["last_post_index"]+1))
+    posts = Post.query.order_by(Post.timestamp.desc()).slice(
+        pages["first_post_index"], (pages["last_post_index"] + 1)
+    )
     num_posts = posts.count()
     if "new_song" in session:
         session.pop("new_song")
     if "post_desc" in session:
         session.pop("post_desc")
-    return render_template("home.html", posts=posts, page=page, items_per_page=pages["items_per_page"], num_posts=num_posts)
+    return render_template(
+        "home.html",
+        posts=posts,
+        page=page,
+        items_per_page=pages["items_per_page"],
+        num_posts=num_posts,
+    )
 
 
 @main.route("/users/<username>")
@@ -128,7 +139,9 @@ def user_details(username):
     match = False
     if current_user == user:
         match = True
-    posts = Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).limit(1)
+    posts = (
+        Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).limit(1)
+    )
     return render_template("user_details.html", user=user, match=match, posts=posts)
 
 
@@ -142,7 +155,7 @@ def edit_user():
             form.populate_obj(user)
             db.session.commit()
             flash("Profile saved successfully", "success")
-            return redirect(url_for('.user_details', username=user.username))
+            return redirect(url_for(".user_details", username=user.username))
         flash("Incorrect password", "danger")
     return render_template("edit_user.html", form=form, user=current_user)
 
@@ -151,10 +164,10 @@ def edit_user():
 def user_search():
     if request.args:
         query = request.args.get("q")
-        results = User.query.filter(User.username.like("%"+query+"%")).slice(0,15)
+        results = User.query.filter(User.username.like("%" + query + "%")).slice(0, 15)
     else:
         query = None
-        results= None
+        results = None
     return render_template("user_search.html", query=query, results=results)
 
 
@@ -308,28 +321,27 @@ def unlike_post():
         return {"response": False}
 
 
-@main.route("/posts/delete", methods=["DELETE"])
-@login_required
-def delete_post():
+@main.route("/posts/delete/<int:post_id>", methods=["DELETE"])
+def delete_post(post_id):
     try:
         user = User.query.get(current_user.id)
-        post_to_delete = Post.query.get(int(request.json["post_id"]))
+        post_to_delete = Post.query.get(int(post_id))
     except exc.SQLAlchemyError:
-        return False
-    if user == post_to_delete.user:
+        return {"response": False}
+    if user == post_to_delete.user or user.admin:
         try:
             db.session.delete(post_to_delete)
             db.session.commit()
-            return True
+            return {"response": True}
         except exc.SQLAlchemyError:
-            return False
+            return {"response": False}
     abort(503)
 
 
 @main.errorhandler(404)
 def not_found(e):
     return render_template("404.html")
-    
+
 
 @main.errorhandler(503)
 def not_found(e):
