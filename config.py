@@ -44,5 +44,5 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     FLASK_ENV = "production"
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        "PROD_DATABASE_URL", default="postgresql:///cots"
+        "DATABASE_URL", default="postgresql:///cots"
     )
