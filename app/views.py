@@ -209,7 +209,7 @@ def user_following(username):
     following_count = Follow.query.filter_by(user_following=user.id).count()
     liked_count = Like.query.filter_by(user_id=user.id).count()
     return render_template(
-        "user_followers.html",
+        "user_following.html",
         user=user,
         match=match,
         following=following,
