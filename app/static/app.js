@@ -3,7 +3,7 @@ async function addLike(postId, target) {
     target.closest("i").removeClass("fas fa-heart").addClass("fas fa-spinner")
     const response = await axios.post('/posts/like', { "post_id": postId })
     if (response.data.response) {
-        target.removeClass("like-button").addClass("unlike-button has-text-danger").closes("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
+        target.removeClass("like-button").addClass("unlike-button has-text-danger").closest("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
     }
     else {
         target.closest("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
@@ -11,9 +11,13 @@ async function addLike(postId, target) {
 }
 
 async function removeLike(postId, target) {
+    target.closest("i").removeClass("fas fa-heart").addClass("fas fa-spinner")
     const response = await axios.post('/posts/unlike', { "post_id": postId })
     if (response.data.response) {
-        target.removeClass("unlike-button has-text-danger").addClass("like-button")
+        target.removeClass("unlike-button has-text-danger").addClass("like-button").closest("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
+    }
+    else {
+        target.closest("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
     }
 }
 
