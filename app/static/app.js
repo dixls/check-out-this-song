@@ -1,8 +1,12 @@
 
 async function addLike(postId, target) {
+    target.closest("i").removeClass("fas fa-heart").addClass("fas fa-spinner")
     const response = await axios.post('/posts/like', { "post_id": postId })
     if (response.data.response) {
-        target.removeClass("like-button").addClass("unlike-button has-text-danger")
+        target.removeClass("like-button").addClass("unlike-button has-text-danger").closes("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
+    }
+    else {
+        target.closest("i").removeClass("fas fa-spinner").addClass("fas fa-heart")
     }
 }
 

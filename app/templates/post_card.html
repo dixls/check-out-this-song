@@ -47,6 +47,7 @@
             <p>{{ post.description }}</p>
         </div>
     </div>
+    {% if current_user.is_authenticated %}
     <footer class="card-footer">
         {% if current_user == post.user or current_user.admin %}
         <a href="#" class="card-footer-item delete-button">
@@ -66,4 +67,5 @@
         </a>
         
     </footer>
+    {% endif %}
 </div>
