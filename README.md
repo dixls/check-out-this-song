@@ -6,6 +6,10 @@
 
 <br>
 
+*COTS* is still under development, but is live and usable here: https://check-out-this-song.herokuapp.com/
+
+<br>
+
 ## API Selection:
 Check Out This Song will use some or all of the following APIs to resolve user requests:
 
