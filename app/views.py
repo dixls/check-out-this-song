@@ -10,7 +10,7 @@ from flask import (
     abort,
 )
 from flask_sqlalchemy import SQLAlchemy
-from app.models import User, Song, Post, db, Follow, metadata
+from app.models import User, Song, Post, db, Follow, Like
 from app import login_manager
 from flask_login import login_required, login_user, logout_user, current_user
 from app.search import YTSearch, LastFMSearch
@@ -159,6 +159,7 @@ def user_details(username):
     )
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()
+    liked_count = Like.query.filter_by(user_id=user.id).count()
     return render_template(
         "user_details.html",
         user=user,
@@ -166,6 +167,7 @@ def user_details(username):
         posts=posts,
         follow_count=follow_count,
         following_count=following_count,
+        liked_count=liked_count
     )
 
 
@@ -181,6 +183,7 @@ def user_followers(username):
     followers = user.followers
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()
+    liked_count = Like.query.filter_by(user_id=user.id).count()
     return render_template(
         "user_followers.html",
         user=user,
@@ -188,6 +191,7 @@ def user_followers(username):
         followers=followers,
         follow_count=follow_count,
         following_count=following_count,
+        liked_count=liked_count
     )
 
 
@@ -203,6 +207,7 @@ def user_following(username):
     following = user.following
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()
+    liked_count = Like.query.filter_by(user_id=user.id).count()
     return render_template(
         "user_followers.html",
         user=user,
@@ -210,6 +215,31 @@ def user_following(username):
         following=following,
         follow_count=follow_count,
         following_count=following_count,
+        liked_count=liked_count
+    )
+
+
+@main.route("/users/<username>/likes")
+def user_likes(username):
+    try:
+        user = User.query.filter_by(username=username).one()
+    except exc.SQLAlchemyError:
+        abort(404)
+    match = False
+    if current_user == user:
+        match = True
+    likes = user.liked_posts
+    follow_count = Follow.query.filter_by(user_followed=user.id).count()
+    following_count = Follow.query.filter_by(user_following=user.id).count()
+    liked_count = Like.query.filter_by(user_id=user.id).count()
+    return render_template(
+        "likes.html",
+        user=user,
+        match=match,
+        likes=likes,
+        follow_count=follow_count,
+        following_count=following_count,
+        liked_count=liked_count
     )
 
 
