@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        {% include 'user_details_top.html' %}
+        <div class="card m-3">
+            <div class="card-block">
+                <h2 class="card-header-title is-4">Users {{user.username}} is following</h2>
+            </div>
+        {% if following %}
+        {% for user in following %}
+        {% include 'user_row.html' %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

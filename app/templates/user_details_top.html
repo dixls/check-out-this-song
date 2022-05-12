@@ -1,0 +1,57 @@
+<div class="container is-half">
+    <div class="media p-2 m-0">
+        <div class="media-left">
+            <figure class="image is-96x96">
+                <img src="{{ user.avatar }}" alt="">
+            </figure>
+        </div>
+        <div class="media-content">
+            <a href="/users/{{user.username}}">
+            <p class="title is-3">{{ user.username }}</p>
+            </a>
+            <a href="/users/{{user.username}}/followers">
+                <p class="header">{{ follow_count }} followers</p>
+            </a>
+            <a href="/users/{{user.username}}/following">
+                <p class="header">{{ following_count }} following</p>
+            </a>
+        </div>
+        <div class="media-right">
+            <div>
+                {% if current_user.is_authenticated %}
+                {% if match %}
+                <a href="{{url_for('main.edit_user')}}" class="button">
+                    Edit Profile
+                    <span class="icon">
+                        <i class="fas fa-gear"></i>
+                    </span>
+                </a>
+                {% else %}
+                    {% if user in current_user.following %}
+                    <a href="#" class="button is-primary is-outlined unfollow-button" id="{{user.id}}">
+                        <span>
+                            Unfollow
+                        </span>
+                        <span class="icon">
+                            <i class="fas fa-minus"></i>
+                        </span>
+                    </a>
+                    {% else %}
+                    <a href="#" class="button is-primary follow-button" id="{{user.id}}">
+                        <span>
+                            Follow
+                        </span>
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </a>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="card-content">
+        <p>{{ user.bio }}</p>
+    </div>
+</div>

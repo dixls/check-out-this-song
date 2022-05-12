@@ -157,7 +157,60 @@ def user_details(username):
     posts = (
         Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).limit(1)
     )
-    return render_template("user_details.html", user=user, match=match, posts=posts)
+    follow_count = Follow.query.filter_by(user_followed=user.id).count()
+    following_count = Follow.query.filter_by(user_following=user.id).count()
+    return render_template(
+        "user_details.html",
+        user=user,
+        match=match,
+        posts=posts,
+        follow_count=follow_count,
+        following_count=following_count,
+    )
+
+
+@main.route("/users/<username>/followers")
+def user_followers(username):
+    try:
+        user = User.query.filter_by(username=username).one()
+    except exc.SQLAlchemyError:
+        abort(404)
+    match = False
+    if current_user == user:
+        match = True
+    followers = user.followers
+    follow_count = Follow.query.filter_by(user_followed=user.id).count()
+    following_count = Follow.query.filter_by(user_following=user.id).count()
+    return render_template(
+        "user_followers.html",
+        user=user,
+        match=match,
+        followers=followers,
+        follow_count=follow_count,
+        following_count=following_count,
+    )
+
+
+@main.route("/users/<username>/following")
+def user_following(username):
+    try:
+        user = User.query.filter_by(username=username).one()
+    except exc.SQLAlchemyError:
+        abort(404)
+    match = False
+    if current_user == user:
+        match = True
+    following = user.following
+    follow_count = Follow.query.filter_by(user_followed=user.id).count()
+    following_count = Follow.query.filter_by(user_following=user.id).count()
+    return render_template(
+        "user_followers.html",
+        user=user,
+        match=match,
+        following=following,
+        follow_count=follow_count,
+        following_count=following_count,
+    )
 
 
 @main.route("/edit-profile", methods=["GET", "POST"])
@@ -351,6 +404,11 @@ def delete_post(post_id):
         except exc.SQLAlchemyError:
             return {"response": False}
     abort(503)
+
+
+@main.route("/about")
+def about():
+    return render_template("about.html")
 
 
 @main.errorhandler(404)

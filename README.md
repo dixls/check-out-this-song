@@ -87,14 +87,14 @@ COTS will use a relational database similar to the one described in the image be
 
 ## Still to do
 
-* Flesh out proposed user flows
-* Test db models
-* start making forms and views
-* figure out main song logic
-* 
+* Figure out a reset password flow (emails?)
+* fine tuning
 
 
 ## Done
 
 * Set up organization of application
 * Create db models
+* full main logic is ready
+* deployed on heroku
+* likes and delete implemented in javascript
