@@ -1,9 +1,9 @@
 from http import HTTPStatus
 from flask_login import login_user, current_user
 from flask import session
-from unittest.mock import Mock
+from pytest_mock import mocker
 
-from app.search import LastFMSearch
+from app.search import LastFMSearch, YTSearch
 
 
 def test_root(client, app, test_db):
@@ -102,16 +102,6 @@ def test_user_detail_page_404(client, app):
     assert b"404" in response.data
 
 
-def test_user_search(client, app):
-    response = client.get("/usersearch")
-    assert b"Search for a user" in response.data
-
-
-def test_user_search_q(client, app, persisted_user):
-    response = client.get("/usersearch", query_string={"q": "test"})
-    assert b"test_user1" in response.data
-
-
 def test_user_search_no_results(client, app, persisted_user):
     response = client.get("/usersearch", query_string={"q": "fakeuser"})
     assert b"no results found" in response.data
@@ -179,7 +169,13 @@ def test_song_search_results(client, app):
     response = client.get("/search-results?q=army of me")
     LastFMSearch = Mock()
 
-    LastFMSearch.matches.return_value = [{'name': 'Army of Me', 'artist': "Bj\xc3\xb6rk", 'url': "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me"}]
+    LastFMSearch.matches.return_value = [
+        {
+            "name": "Army of Me",
+            "artist": "Bj\xc3\xb6rk",
+            "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
+        }
+    ]
 
     assert response.status_code == HTTPStatus.OK
     assert b"Bj\xc3\xb6rk" in response.data
@@ -192,3 +188,22 @@ def test_song_search_bad_results(client, app):
     assert b"no matches found" in response.data
 
 
+def test_video_select(client, app, mocker):
+    """Test works, but mock does not, test fails because expected result based on mocked YTSearch is not passed"""
+    response = client.post(
+        "/video-select",
+        data={
+            "title": "Army of Me",
+            "artist": "Bj\xc3\xb6rk",
+            "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
+        },
+    )
+    
+    mocker.patch.object( main.video_select.yt.match, return_value = [
+        {
+            "snippet": {"title": "björk : army of me (HD)", "channelTitle": "björk"},
+            "id": {"videoId": "jPeheoBa2_Y"},
+        }
+    ])
+    breakpoint()
+    assert b"army of me" in response.data

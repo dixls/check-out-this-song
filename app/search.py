@@ -1,9 +1,5 @@
-import os
 import requests
-from dotenv import load_dotenv
 from flask import current_app as app
-
-load_dotenv()
 
 
 class YTSearch:

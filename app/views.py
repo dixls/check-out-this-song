@@ -102,7 +102,6 @@ def signup():
 
 @main.route("/")
 def root():
-    db.session.rollback()
     if request.args:
         page = int(request.args.get("p"))
         pages = pagination(page)
@@ -129,10 +128,6 @@ def root():
         )
 
     num_posts = posts.count()
-    if "new_song" in session:
-        session.pop("new_song")
-    if "post_desc" in session:
-        session.pop("post_desc")
     return render_template(
         "home.html",
         posts=posts,
