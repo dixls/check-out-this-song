@@ -136,8 +136,9 @@ def test_edit_user_get(app, test_db, persisted_user):
     """
     with app.test_client(user=persisted_user) as test_client:
         response = test_client.get("/edit-profile")
+        current_user = persisted_user
 
     assert response.status_code == HTTPStatus.OK
     assert current_user.id == persisted_user.id
-    assert b"404" not in response.data
-    assert b"503" not in response.data
+    assert b"404 " not in response.data
+    assert b"503 " not in response.data
