@@ -1,7 +1,9 @@
-from cgi import test
 from http import HTTPStatus
 from flask_login import login_user, current_user
 from flask import session
+from unittest.mock import Mock
+
+from app.search import LastFMSearch
 
 
 def test_root(client, app, test_db):
@@ -125,14 +127,11 @@ def test_song_search_post(client, app):
     assert response.status_code == HTTPStatus.FOUND
 
 
-
 def test_edit_user_get(app, test_db, persisted_user):
     """
     Given a registered user
     When that user attempts to view the edit-profile page
     Then the page should be found without a 404
-
-    I cannot get this one to work at all, I've tried a number of different ways to login a user, but it's unclear if they work, and if they do, none seem to let current_user function right.
     """
     with app.test_client(user=persisted_user) as test_client:
         response = test_client.get("/edit-profile")
@@ -140,5 +139,56 @@ def test_edit_user_get(app, test_db, persisted_user):
 
     assert response.status_code == HTTPStatus.OK
     assert current_user.id == persisted_user.id
+    assert bytes(current_user.email, "utf8") in response.data
     assert b"404 " not in response.data
     assert b"503 " not in response.data
+
+
+def test_user_search(client, app):
+    response = client.get("/usersearch")
+
+    assert b"Search for a user" in response.data
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_user_search_with_query(client, app, persisted_user):
+    response = client.get("/usersearch?q=test")
+
+    assert bytes(persisted_user.username, "utf8") in response.data
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_user_search_with_bad_query(client, app, persisted_user):
+    response = client.get("/usersearch?q=jibberish")
+
+    assert b"Sorry, no results found" in response.data
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_song_search(app, test_db, persisted_user):
+    with app.test_client(user=persisted_user) as test_client:
+        response = test_client.get("/search")
+        current_user = persisted_user
+
+    assert response.status_code == HTTPStatus.OK
+    assert b"Search for a song title" in response.data
+
+
+def test_song_search_results(client, app):
+    """Not sure if mock implemented properly?"""
+    response = client.get("/search-results?q=army of me")
+    LastFMSearch = Mock()
+
+    LastFMSearch.matches.return_value = [{'name': 'Army of Me', 'artist': "Bj\xc3\xb6rk", 'url': "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me"}]
+
+    assert response.status_code == HTTPStatus.OK
+    assert b"Bj\xc3\xb6rk" in response.data
+
+
+def test_song_search_bad_results(client, app):
+    response = client.get("/search-results?q=gnjresklfodiasseewap")
+
+    assert response.status_code == HTTPStatus.OK
+    assert b"no matches found" in response.data
+
+

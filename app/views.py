@@ -23,7 +23,6 @@ main = Blueprint("main", __name__)
 
 login_manager.login_view = "main.login"
 login_manager.login_message_category = "danger"
-# login_manager.session_protection = app.config["SESSION_PROTECTION"]
 
 
 @login_manager.user_loader
@@ -49,9 +48,7 @@ def login():
                 flash(f"Welcome back {username}", "success")
 
                 next = request.args.get("next")
-                # if not is_safe_url(next):
-                #     return abort(400)
-                # need to implement is_safe_url function for redirects
+                # need to implement is_safe_url function for safe redirects
                 return redirect(next or url_for(".root"))
             flash("Invalid credentials", "danger")
         else:
