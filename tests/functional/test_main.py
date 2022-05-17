@@ -2,7 +2,7 @@ from http import HTTPStatus
 from flask_login import login_user, current_user
 from flask import session
 from pytest_mock import mocker
-
+from unittest import mock
 from app.search import LastFMSearch, YTSearch
 
 
@@ -164,21 +164,31 @@ def test_song_search(app, test_db, persisted_user):
     assert b"Search for a song title" in response.data
 
 
-def test_song_search_results(client, app):
+def test_song_search_results(client, app, mocker):
     """Not sure if mock implemented properly?"""
+    mocker.patch(
+        "app.views.LastFMSearch.get_results",
+        return_value={
+            "result": {
+                "results": {
+                    "trackmatches": {
+                        "track": [
+                            {
+                                "name": "Army of Me",
+                                "artist": "björk",
+                                "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
+                                "image": "/static/user_icon-01.png"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+    )
     response = client.get("/search-results?q=army of me")
-    LastFMSearch = Mock()
-
-    LastFMSearch.matches.return_value = [
-        {
-            "name": "Army of Me",
-            "artist": "Bj\xc3\xb6rk",
-            "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
-        }
-    ]
-
+    
     assert response.status_code == HTTPStatus.OK
-    assert b"Bj\xc3\xb6rk" in response.data
+    assert b"bj\xc3\xb6rk" in response.data
 
 
 def test_song_search_bad_results(client, app):
@@ -190,6 +200,23 @@ def test_song_search_bad_results(client, app):
 
 def test_video_select(client, app, mocker):
     """Test works, but mock does not, test fails because expected result based on mocked YTSearch is not passed"""
+    mocker.patch(
+        "app.views.YTSearch.get_results",
+        return_value={
+            "result": {
+                "items": [
+                    {
+                        "snippet": {
+                            "title": "björk : army of me (HD)",
+                            "channelTitle": "björk",
+                        },
+                        "id": {"videoId": "jPeheoBa2_Y"},
+                    }
+                ]
+            }
+        },
+    )
+
     response = client.post(
         "/video-select",
         data={
@@ -198,12 +225,8 @@ def test_video_select(client, app, mocker):
             "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
         },
     )
-    
-    mocker.patch.object( main.video_select.yt.match, return_value = [
-        {
-            "snippet": {"title": "björk : army of me (HD)", "channelTitle": "björk"},
-            "id": {"videoId": "jPeheoBa2_Y"},
-        }
-    ])
-    breakpoint()
+
     assert b"army of me" in response.data
+
+
+# def test_confirm_post(client, app, )
