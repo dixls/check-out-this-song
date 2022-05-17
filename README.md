@@ -2,13 +2,26 @@
 ### *A This Is My Jam clone*
 <br>
 
+## *COTS* is live and usable here: https://check-out-this-song.herokuapp.com/
+<br>
+
 *Check Out This Song* (*COTS*) is a lightly social music sharing web app inspired by [This Is My Jam](https://www.thisismyjam.com/) that allows users to post one song at a time that they feel that others should check out! *COTS* is my first capstone project for the Springboard Software Engineering program.
+<br><br>
+*COTS* was created using a Flask backend with a Postgresql relational database, pages served with jinja, and some front end features implemented with jQuery. Styling comes from Bulma's CSS framework, and testing is done with pytest.
+<br><br>
 
-<br>
+## Features:
+Some of the features implemented in *COTS* include:
 
-*COTS* is still under development, but is live and usable here: https://check-out-this-song.herokuapp.com/
-
-<br>
+* Following other users
+  * I wanted users to be able to follow their friends so that their feed could be tailored in some way
+* Youtube embeds
+  * I didn't want users to need to navigate away from the site in order to listen to the songs that have been shared
+* Normalized Song data from Last.fm
+  * By getting formatted metadata from last.fm in the first step of posting a song, styling and information can be consistent
+* User Search
+  * implementing a recommendation system for users to follow would be helpful, but without that step, being able to search for users to follow makes it easy enough to find people.
+<br><br>
 
 ## API Selection:
 Check Out This Song will use some or all of the following APIs to resolve user requests:
@@ -20,6 +33,7 @@ Check Out This Song will use some or all of the following APIs to resolve user r
 * Last.fm API
 
         http://ws.audioscrobbler.com/2.0/
+<br>
 
 ## Database Design
 COTS will use a relational database similar to the one described in the image below.
@@ -65,30 +79,43 @@ COTS will use a relational database similar to the one described in the image be
     FollowingUser int PK FK >- Users.ID
     FollowedUser int PK FK >- Users.ID
 </details>
- 
-<br>
+<br><br>
 
 ## User Flow
 
 ### Unregistered user
 
 * When an unregistered visitor first visits the page the home page will have a short feed drawing from the most recent posts with the most likes.
-* Nav at the top and prompt at the bottom to register or login
+* Attempting to post a new song will redirect them to login with an option to sign up
 * Signup requires email, username, password, optional bio and (upload?) avatar
-* Signup process should include email verification step
-* Once signed up, use should be presented with a prompt to make a post
-* Once posted successfully, takes user to detail page for that post
+* Once signed up, user is taken to their homepage with a prompt to search for users to follow and a link to the user search page
+* User search page returns a list of matching users with a follow (or unfollow) button next to each user
+* User can now post new songs or return to visit the home page
 
 ### Registered user
 
-* etc
+* When a logged in user returns to Check Out This Song, their home page will be populated with the most recent posts from themselves and from users they follow.
+* Users can click on their name in the navbar to view their profile and have the option to edit their profile information.
+* Logged in users can also see a Heart icon at the bottom of each post to 'like' a post
+* Users liked posts can be seen from their profile view page by clicking the "liked posts" link
+* In the main feed users will also be able to see a trash can icon on their own posts in order to delete them, Admin users can see a trash can icon on any posts in order to delete offensive posts
+
+### Posting flow
+
+* Starting a new post the user is prompted to search for a song
+* Search results are a list of normalized song data from last.fm
+* After selecting the appropriate match, user is presented with a list of youtube videos based on the song they selected
+* After picking a youtube video the user is prompted to write a description for why they are posting this song
+* User will then be presented with a confirmation screen with a preview of their completed post
+* Once confirmed the user will be returned to their home page where their post will be in the feed and visible near the top (high post volume notwithstanding)
 
 <br>
 
 ## Still to do
 
 * Figure out a reset password flow (emails?)
-* fine tuning
+* confirmation modal for deleting posts would be nice
+* reusing existing song entries for new posts
 
 
 ## Done
@@ -99,3 +126,4 @@ COTS will use a relational database similar to the one described in the image be
 * deployed on heroku
 * likes and delete implemented in javascript
 * a bunch of tests
+* improved js performance
