@@ -14,7 +14,7 @@
                 {% if current_user.is_authenticated %}
                 {% if user != current_user %}
                     {% if user in current_user.following %}
-                    <a href="#" class="button is-primary is-outlined unfollow-button" id="{{user.id}}">
+                    <a class="button is-primary is-outlined unfollow-button" id="{{user.id}}">
                         <span>
                             Unfollow
                         </span>
@@ -23,7 +23,7 @@
                         </span>
                     </a>
                     {% else %}
-                    <a href="#" class="button is-primary follow-button" id="{{user.id}}">
+                    <a  class="button is-primary follow-button" id="{{user.id}}">
                         <span>
                             Follow
                         </span>
