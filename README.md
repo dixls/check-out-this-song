@@ -98,3 +98,4 @@ COTS will use a relational database similar to the one described in the image be
 * full main logic is ready
 * deployed on heroku
 * likes and delete implemented in javascript
+* a bunch of tests

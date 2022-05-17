@@ -227,6 +227,3 @@ def test_video_select(client, app, mocker):
     )
 
     assert b"army of me" in response.data
-
-
-# def test_confirm_post(client, app, )
