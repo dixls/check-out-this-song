@@ -18,6 +18,7 @@ from flask import current_app as app
 from sqlalchemy import exc, or_, select
 from .pagination import pagination
 import app.forms
+from app.helpers import get_user
 
 main = Blueprint("main", __name__)
 
@@ -140,12 +141,9 @@ def root():
 @main.route("/users/<username>")
 def user_details(username):
     try:
-        user = User.query.filter_by(username=username).one()
-    except exc.SQLAlchemyError:
+        (match, user) = get_user(username, current_user)
+    except:
         abort(404)
-    match = False
-    if current_user == user:
-        match = True
     posts = (
         Post.query.filter_by(user_id=user.id).order_by(Post.timestamp.desc()).limit(1)
     )
@@ -166,12 +164,9 @@ def user_details(username):
 @main.route("/users/<username>/followers")
 def user_followers(username):
     try:
-        user = User.query.filter_by(username=username).one()
-    except exc.SQLAlchemyError:
+        (match, user) = get_user(username, current_user)
+    except:
         abort(404)
-    match = False
-    if current_user == user:
-        match = True
     followers = user.followers
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()
@@ -190,12 +185,9 @@ def user_followers(username):
 @main.route("/users/<username>/following")
 def user_following(username):
     try:
-        user = User.query.filter_by(username=username).one()
-    except exc.SQLAlchemyError:
+        (match, user) = get_user(username, current_user)
+    except:
         abort(404)
-    match = False
-    if current_user == user:
-        match = True
     following = user.following
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()
@@ -214,12 +206,9 @@ def user_following(username):
 @main.route("/users/<username>/likes")
 def user_likes(username):
     try:
-        user = User.query.filter_by(username=username).one()
-    except exc.SQLAlchemyError:
+        (match, user) = get_user(username, current_user)
+    except:
         abort(404)
-    match = False
-    if current_user == user:
-        match = True
     likes = user.liked_posts
     follow_count = Follow.query.filter_by(user_followed=user.id).count()
     following_count = Follow.query.filter_by(user_following=user.id).count()

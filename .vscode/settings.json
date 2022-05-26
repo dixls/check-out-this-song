@@ -4,6 +4,7 @@
         "dotenv",
         "lastfm",
         "ondelete",
+        "sqlalchemy",
         "unfollow",
         "unfollowing",
         "unliking",

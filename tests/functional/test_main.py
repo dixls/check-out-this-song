@@ -99,7 +99,7 @@ def test_user_detail_page(client, app, test_db, persisted_user):
 def test_user_detail_page_404(client, app):
 
     response = client.get(f"/users/not_a_real_user")
-    assert b"404" in response.data
+    assert b"404 " in response.data
 
 
 def test_user_search_no_results(client, app, persisted_user):
