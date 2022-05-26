@@ -1,4 +1,5 @@
 import email
+from http import HTTPStatus
 from flask import (
     Blueprint,
     render_template,
@@ -422,11 +423,11 @@ def about():
     return render_template("about.html")
 
 
-@main.errorhandler(404)
+@main.errorhandler(HTTPStatus.NOT_FOUND)
 def not_found(e):
     return render_template("404.html")
 
 
-@main.errorhandler(503)
+@main.errorhandler(HTTPStatus.UNAUTHORIZED)
 def not_found(e):
     return render_template("503.html")

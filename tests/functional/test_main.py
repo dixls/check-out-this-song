@@ -18,7 +18,7 @@ def test_login_get(client, app):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_login_post(client, app, persisted_user):
+def test_login_post_should_succeed(client, app, persisted_user):
 
     response = client.post(
         "login",
@@ -28,7 +28,7 @@ def test_login_post(client, app, persisted_user):
     assert b"Welcome back" in response.data
 
 
-def test_login_post_bad_pw(client, app, persisted_user):
+def test_login_post_bad_pw_should_fail(client, app, persisted_user):
 
     response = client.post(
         "login",
@@ -38,7 +38,7 @@ def test_login_post_bad_pw(client, app, persisted_user):
     assert b"Invalid credentials" in response.data
 
 
-def test_login_post_bad_username(client, app, persisted_user):
+def test_login_post_bad_username_should_fail(client, app, persisted_user):
 
     response = client.post(
         "login",
@@ -48,12 +48,10 @@ def test_login_post_bad_username(client, app, persisted_user):
     assert b"Username not found" in response.data
 
 
-def test_signup_get(app):
-
-    with app.test_client() as test_client:
-        response = test_client.get("/signup")
-        assert response.status_code == HTTPStatus.OK
-        assert b"Sign up for Check Out This Song!" in response.data
+def test_signup_get(app, client):
+    response = client.get("/signup")
+    assert response.status_code == HTTPStatus.OK
+    assert b"Sign up for Check Out This Song!" in response.data
 
 
 def test_signup_post(client, app, test_db):
@@ -78,7 +76,7 @@ def test_signup_post_illegal_username(client, app, test_db):
     response = client.post(
         "/signup",
         data={
-            "username": "test_signup_user",
+            "username": "illegal_user_name_not_alpha_numeric",
             "password": "test_signup_password",
             "email": "test_email@email.com",
             "avatar": None,
@@ -164,7 +162,7 @@ def test_song_search(app, test_db, persisted_user):
     assert b"Search for a song title" in response.data
 
 
-def test_song_search_results(client, app, mocker):
+def test_song_search_results(client, app, mocker, bytes_bjork):
     """Not sure if mock implemented properly?"""
     mocker.patch(
         "app.views.LastFMSearch.get_results",
@@ -188,7 +186,7 @@ def test_song_search_results(client, app, mocker):
     response = client.get("/search-results?q=army of me")
     
     assert response.status_code == HTTPStatus.OK
-    assert b"bj\xc3\xb6rk" in response.data
+    assert bytes_bjork in response.data
 
 
 def test_song_search_bad_results(client, app):
@@ -198,7 +196,7 @@ def test_song_search_bad_results(client, app):
     assert b"no matches found" in response.data
 
 
-def test_video_select(client, app, mocker):
+def test_video_select(client, app, mocker, bytes_bjork_capitalized):
     """Test works, but mock does not, test fails because expected result based on mocked YTSearch is not passed"""
     mocker.patch(
         "app.views.YTSearch.get_results",
@@ -221,7 +219,7 @@ def test_video_select(client, app, mocker):
         "/video-select",
         data={
             "title": "Army of Me",
-            "artist": "Bj\xc3\xb6rk",
+            "artist": bytes_bjork_capitalized,
             "url": "https://www.last.fm/music/Bj%C3%B6rk/_/Army+of+Me",
         },
     )
