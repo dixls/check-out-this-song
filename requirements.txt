@@ -1,5 +1,6 @@
 attrs==21.4.0
 bcrypt==3.2.0
+beautifulsoup4==4.11.1
 black==22.3.0
 certifi==2021.10.8
 cffi==1.15.0
@@ -36,6 +37,7 @@ pytest-mock==3.7.0
 python-dotenv==0.20.0
 requests==2.27.1
 six==1.16.0
+soupsieve==2.3.2.post1
 SQLAlchemy==1.4.35
 tomli==2.0.1
 typing-extensions==4.1.1

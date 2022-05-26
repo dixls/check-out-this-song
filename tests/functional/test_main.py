@@ -4,6 +4,7 @@ from flask import session
 from pytest_mock import mocker
 from unittest import mock
 from app.search import LastFMSearch, YTSearch
+from bs4 import BeautifulSoup
 
 
 def test_root(client, app, test_db):
@@ -97,7 +98,9 @@ def test_user_detail_page(client, app, test_db, persisted_user):
 def test_user_detail_page_404(client, app):
 
     response = client.get(f"/users/not_a_real_user")
-    assert b"404 " in response.data
+    parsed_html = BeautifulSoup(response.data, 'html.parser')
+
+    assert parsed_html.find(id="error-404")
 
 
 def test_user_search_no_results(client, app, persisted_user):
@@ -124,12 +127,13 @@ def test_edit_user_get(app, test_db, persisted_user):
     with app.test_client(user=persisted_user) as test_client:
         response = test_client.get("/edit-profile")
         current_user = persisted_user
+        parsed_html = BeautifulSoup(response.data, 'html.parser')
 
     assert response.status_code == HTTPStatus.OK
     assert current_user.id == persisted_user.id
     assert bytes(current_user.email, "utf8") in response.data
-    assert b"404 " not in response.data
-    assert b"503 " not in response.data
+    assert not parsed_html.find(id="error-404")
+    assert not parsed_html.find(id="error-503")
 
 
 def test_user_search(client, app):
