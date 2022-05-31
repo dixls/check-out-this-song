@@ -1,8 +1,14 @@
-from app.models import Song
+from app.search import YTSearch, LastFMSearch
 import pytest
 
 
-@pytest.fixture(scope="module")
-def new_song():
-    song = Song(title="", artist="", youtube_url="", lastfm_entry="")
-    return song
+@pytest.fixture
+def test_search_lfm():
+    sanctuary_search = LastFMSearch("sanctuary elder")
+    return sanctuary_search
+
+
+@pytest.fixture
+def test_search_yt():
+    sanctuary_yt_search = YTSearch("sanctuary")
+    return sanctuary_yt_search

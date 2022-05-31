@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        {% include 'user_details_top.html' %}
+            <div class="card-block">
+                <h2 class="card-header-title is-4">Posts {{user.username}} has liked</h2>
+            </div>
+        {% if likes %}
+        {% for post in likes %}
+        {% include 'post_card.html' %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

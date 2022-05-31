@@ -3,3 +3,4 @@ secrets.py
 secrets.env
 .env
 __pycache__/
+seed.py

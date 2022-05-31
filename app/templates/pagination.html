@@ -1,0 +1,50 @@
+<div class="columns is-centered">
+    {% if page %}
+        <div class="column has-text-centered">
+            {% if page == 1 %}
+            <a href="/" class="button">
+            {% else %}
+            <a href="/?p={{page-1}}" class="button">
+            {% endif %}
+                <span class="icon">
+                    <i class="fas fa-angle-left"></i>
+                </span>
+                <span>
+                    Newer
+                </span>
+            </a>
+        </div>
+        <div class="column"></div>
+        {% if num_posts < items_per_page %}
+            <div class="column"></div>
+        {% else %}
+            <div class="column has-text-centered">
+                <a href="/?p={{page+1}}" class="button">
+                    <span>
+                        Older
+                    </span>
+                    <span class="icon">
+                        <i class="fas fa-angle-right"></i>
+                    </span>
+                </a>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="column"></div>
+        <div class="column"></div>
+        {% if num_posts <= items_per_page %}
+            <div class="column"></div>
+        {% else %}
+        <div class="column has-text-centered">
+            <a href="/?p=1" class="button">
+                <span>
+                    Older
+                </span>
+                <span class="icon">
+                    <i class="fas fa-angle-right"></i>
+                </span>
+            </a>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<span class="icon is-large">
+    <a href="{{url_for('main.create_post')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
+<h1 class="title">How's this look?</h1>
+<div class="columns is-multiline is-centered">
+    <div class="column is-half-tablet">
+        <div class="card m-3">
+            <div class="card-title m-0 p-2">
+                <div class="level">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <div>
+                                <p class="title is-4">{{ song.title }}</p>
+                                <p class="heading is-6 m-0">by {{ song.artist }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-image">
+                {% include 'yt-embed.html' %}
+            </div>
+            <div class="media p-2 m-0">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img src="{{ user.avatar }}" alt="">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="heading is-6 is-italic p-0 m-0">shared by</p>
+                    <p class="title is-4">{{ user.username }}</p>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="content">
+                    <p>{{ description }}</p>
+                </div>
+                <form action="" method="post"></form>
+                    <a href="{{url_for('main.submit')}}" class="button is-primary">Submit!</a>
+                    <a href="/" class="button secondary">cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

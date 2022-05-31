@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if matches %}
+<h1 class="title">Results for '<i>{{query}}</i>'</h1>
+<span class="icon is-large">
+    <a href="{{url_for('main.search')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
+<div class="columns is-multiline is-centered">
+    {% for match in matches[:5] %}
+    <div class="column is-three-quarters">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="{{match['image'][1]['#text']}}" alt="">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title">{{match['name']}}</p>
+                        <p class="subtitle"><i>by</i> {{match['artist']}}</p>
+                    </div>
+                    <form action="{{url_for('main.video_select')}}" method="post">
+                        {{ form.csrf_token }}
+                        {{ form.title(value_=match['name']) }}
+                        {{ form.artist(value_=match['artist']) }}
+                        {{ form.lastfm_entry(value_=match['url']) }}
+                        <div class="media-right">
+                            <button type="submit" class="button is-success">
+                                <span class="icon is-large">
+                                    <i class="fas fa-2x fa-check"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+no matches found
+{% endif %}
+{% endblock %}

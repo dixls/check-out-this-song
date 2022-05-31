@@ -1,0 +1,40 @@
+    <div class="card-block">
+        <div class="card-content">
+            <a href="/users/{{user.username}}">
+            <div class="media p-2 m-0">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img src="{{ user.avatar }}" alt="">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <a href="/users/{{user.username}}">
+                    <p class="title is-4">{{ user.username }}</p>
+                </div>
+                {% if current_user.is_authenticated %}
+                {% if user != current_user %}
+                    {% if user in current_user.following %}
+                    <a class="button is-primary is-outlined unfollow-button" id="{{user.id}}">
+                        <span>
+                            Unfollow
+                        </span>
+                        <span class="icon">
+                            <i class="fas fa-minus"></i>
+                        </span>
+                    </a>
+                    {% else %}
+                    <a  class="button is-primary follow-button" id="{{user.id}}">
+                        <span>
+                            Follow
+                        </span>
+                        <span class="icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </a>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+            </div>
+            </a>
+        </div>
+    </div>

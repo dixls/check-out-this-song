@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<span class="icon is-large">
+    <a href="{{url_for('main.create_post')}}">
+        <i class="fas fa-2x fa-angle-left"></i>
+    </a>
+</span>
+<h1 class="title">How's this look?</h1>
+<div class="columns is-multiline is-centered">
+    <div class="column is-half-tablet">
+        <div class="card m-3">
+            <div class="card-image">
+                {% include 'yt-embed.html' %}
+            </div>
+            <div class="card-content">
+                <p class="title is-4">{{ song.title }}</p>
+                <p class="subtitle is-6">by {{ song.artist }}</p>
+                <form action="{{url_for('main.confirm_post')}}" method="post">
+                    {{ post_form.csrf_token }}
+                    {{ post_form.song_id(value_=song.id) }}
+                    <div class="field">
+                        {{ post_form.description.label(class_="label") }}
+                        {{ post_form.description(class_="textarea", placeholder_="Check out this song!") }}
+                    </div>
+                    <button type="submit" class="button is-primary">Submit!</button>
+                    <a href="/" class="button secondary">cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

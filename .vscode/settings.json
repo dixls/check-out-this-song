@@ -1,0 +1,21 @@
+{
+    "cSpell.ignoreWords": [
+        "Embeddable",
+        "dotenv",
+        "lastfm",
+        "ondelete",
+        "sqlalchemy",
+        "unfollow",
+        "unfollowing",
+        "unliking",
+        "wtforms"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "cSpell.words": [
+        "unhashed"
+    ]
+}

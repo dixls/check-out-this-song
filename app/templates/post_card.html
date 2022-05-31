@@ -1,0 +1,71 @@
+<div class="card m-3" id="{{post.id}}">
+    <div class="card-title m-0 p-2">
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item">
+                    <div>
+                        <p class="title is-4">{{ post.song.title }}</p>
+                        <p class="heading is-6 m-0">by {{ post.song.artist }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-image">
+        {% include 'yt-embed-feed.html' %}
+    </div>
+    <div class="media p-2 m-0">
+        <div class="media-left">
+            <figure class="image is-48x48">
+                <a href="/users/{{post.user.username}}">
+                    <img src="{{ post.user.avatar }}" alt="">
+                </a>
+            </figure>
+        </div>
+        <div class="media-content">
+            <p class="heading is-6 is-italic p-0 m-0">shared by</p>
+            <a href="/users/{{post.user.username}}">
+            <p class="title is-4">{{ post.user.username }}</p>
+            </a>
+        </div>
+        <div class="media-right">
+            <div class="level">
+                <div class="level-right">
+                    <div class="level-item">
+                        <div>
+                            <p class="level-right heading is-6 is-italic">posted on</p>
+                            <p class="level-right heading is-6">{{ post.date_format() }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-content">
+       
+        <div class="content">
+            <p>{{ post.description }}</p>
+        </div>
+    </div>
+    {% if current_user.is_authenticated %}
+    <footer class="card-footer">
+        {% if current_user == post.user or current_user.admin %}
+        <a class="card-footer-item delete-button">
+            <span>
+                <i class="fas fa-trash"></i>
+            </span>
+        </a>
+        {% endif %}
+        {% if post in current_user.liked_posts %}
+        <a class="card-footer-item unlike-button has-text-danger">
+        {% else %}
+        <a class="card-footer-item like-button">
+        {% endif %}
+            <span>
+                <i class="fas fa-heart"></i>
+            </span>
+        </a>
+        
+    </footer>
+    {% endif %}
+</div>

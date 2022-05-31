@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="columns is-tablet is-centered">
+    <div class="column is-half">
+        {% include 'user_details_top.html' %}
+        <h2 class="title is-4">{{user.username}}'s most recent post</h2>
+        {% if posts %}
+        {% for post in posts %}
+        {% include 'post_card.html' %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
