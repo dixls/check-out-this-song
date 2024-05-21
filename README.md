@@ -2,7 +2,8 @@
 ### *A This Is My Jam clone*
 <br>
 
-## *COTS* is live and usable here: https://check-out-this-song.herokuapp.com/
+*The live instance of Check Out This Song is no longer available due to the
+ending of heroku's free tier*
 <br>
 
 *Check Out This Song* (*COTS*) is a lightly social music sharing web app inspired by [This Is My Jam](https://www.thisismyjam.com/) that allows users to post one song at a time that they feel that others should check out! *COTS* is my first capstone project for the Springboard Software Engineering program.
